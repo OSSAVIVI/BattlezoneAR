@@ -15,8 +15,11 @@ public class EnemyMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
-        transform.position += transform.forward * 1f * Time.deltaTime;
+        if (Vector3.Distance(transform.position, target.transform.position) > 6f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
+            transform.position += transform.forward * 1f * Time.deltaTime;
+        }
     }
 }
