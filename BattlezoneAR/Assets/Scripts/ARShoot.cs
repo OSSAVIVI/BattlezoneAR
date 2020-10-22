@@ -11,5 +11,6 @@ public class ARShoot : MonoBehaviour
     {
         Rigidbody shot = Instantiate(projectile[0], shotSpawn.position, shotSpawn.rotation);
         shot.AddForce(shotSpawn.forward * 1500f);
+        SoundManagerScript.playsound();
     }
 }
