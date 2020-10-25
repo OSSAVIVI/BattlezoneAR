@@ -6,8 +6,7 @@ public class NonPlayerHealth : MonoBehaviour
 {
     public int health;
     private float hitRate;
-    private float nextHit;
-
+    private float nextHit;  
     void Start()
     {
         hitRate = 0.1f;
@@ -24,6 +23,7 @@ public class NonPlayerHealth : MonoBehaviour
             print("POSTDAMAGE: Non-Player Heatlh -> " + health);
             if (health <= 0)
             {
+                ExplosionSoundScript.playShotSound();
                 Destroy(gameObject);
             }
         }
