@@ -576,6 +576,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8984679590806176199, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 9061709859719313149, guid: 420ff04ff7fb240be95d1b61c94506e7,
         type: 3}
       propertyPath: m_Name
@@ -588,6 +593,56 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 420ff04ff7fb240be95d1b61c94506e7, type: 3}
+--- !u!1 &344147435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8984679590806176199, guid: 420ff04ff7fb240be95d1b61c94506e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 344147434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &344147436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PlanePrefab: {fileID: 2791172425969076626, guid: 61e1e7a64e6491248a31517c07313f2f,
+    type: 3}
+  m_DetectionMode: -1
+--- !u!114 &344147438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa17d122634046b4a8e23048891fafc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &344147439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c16dcb9d6238f41959468b3db6ce41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arPosition: {fileID: 991023619}
+  placeablePrefab: {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4,
+    type: 3}
+  touchPosition: {x: 0, y: 0}
+  cameraViewPosition: {x: 0, y: 0}
 --- !u!1 &467638946
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,7 +895,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1179767139}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: AR Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
