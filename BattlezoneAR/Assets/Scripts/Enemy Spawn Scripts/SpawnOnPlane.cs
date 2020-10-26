@@ -47,9 +47,7 @@ public class SpawnOnPlane : MonoBehaviour
             if (raycastManager.Raycast(touchPosition, raycastHits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon))
             {
                 var hitPose = raycastHits[0].pose;
-
-                    enemyObject = Instantiate(placeablePrefab, hitPose.position, hitPose.rotation);
-
+                enemyObject = Instantiate(placeablePrefab, hitPose.position, hitPose.rotation);
             }
         }
         else
