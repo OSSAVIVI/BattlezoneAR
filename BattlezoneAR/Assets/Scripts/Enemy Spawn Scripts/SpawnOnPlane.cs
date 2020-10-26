@@ -50,10 +50,6 @@ public class SpawnOnPlane : MonoBehaviour
                 enemyObject = Instantiate(placeablePrefab, hitPose.position, hitPose.rotation);
             }
         }
-        else
-        {
-            return;
-        }
     }
 
 
