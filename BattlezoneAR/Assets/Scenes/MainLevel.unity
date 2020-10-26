@@ -807,7 +807,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2
-  clip: {fileID: 0}
 --- !u!65 &623980807
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1034,7 +1033,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2
-  clip: {fileID: 0}
 --- !u!65 &1319189690
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1328,7 +1326,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  clip: {fileID: 0}
 --- !u!65 &1818752504
 BoxCollider:
   m_ObjectHideFlags: 0
