@@ -14,7 +14,7 @@ public class EnemyShoot : MonoBehaviour
     {
         shootRate = Random.Range(5, 10); //Enemies can have shoot rate betwene 5 and 10 shots pers second
         nextShoot = -1f;
-        shootForce = 500f;
+        shootForce = 1000f;
     }
 
     public void FixedUpdate()
