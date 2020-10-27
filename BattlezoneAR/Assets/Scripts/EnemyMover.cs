@@ -43,7 +43,7 @@ public class EnemyMover : MonoBehaviour
             shotFired = true;
             Debug.Log("looking at");
             // ObjA is looking mostly towards ObjB
-            Shoot();
+            //Shoot();
         }
     }
 }
