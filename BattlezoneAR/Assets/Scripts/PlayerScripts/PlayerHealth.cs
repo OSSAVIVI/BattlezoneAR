@@ -10,11 +10,12 @@ public class PlayerHealth : MonoBehaviour
     public GameObject healthDisplay;
     private float hitRate;
     private float nextHit;
-    public GameObject hitFlash;
+    public GameObject[] hitFlash;
     private bool flashOn;
     private bool killSwitch;
     private int flashTime;
     private float nextFlash;
+    private int lastFlash;
 
     void Start()
     {
@@ -22,7 +23,7 @@ public class PlayerHealth : MonoBehaviour
         healthDisplay.GetComponent<Text>().text = health.ToString() + " HP";
         hitRate = 0.5f;
         nextHit = -1f;
-        hitFlash.SetActive(false);
+        StopFlash();
         killSwitch = false;
         flashTime = 1;
         nextFlash = -1f;
@@ -50,16 +51,28 @@ public class PlayerHealth : MonoBehaviour
         if (flashOn && killSwitch == false)
         {
             killSwitch = true;
-            hitFlash.SetActive(true);
+            ChooseFlash();
             nextFlash = Time.time + flashTime;
-            print("DOOOH");
         }
         if (flashOn && killSwitch == true && Time.time > nextFlash)
         {
             flashOn = false;
             killSwitch = false;
-            hitFlash.SetActive(false);
-            print("sldjkahfksjdfhalskjd");
+            StopFlash();
         }
+    }
+
+    private void ChooseFlash()
+    {
+        var rand = Random.Range(0, 30);
+        if (rand > 20) lastFlash = 2;
+        else if (rand > 10) lastFlash = 1;
+        else lastFlash = 0;
+        hitFlash[lastFlash].SetActive(true);
+    }
+
+    private void StopFlash()
+    {
+        for (int i = 0; i < 3; i++) hitFlash[i].SetActive(false);
     }
 }
