@@ -17,10 +17,8 @@ public class NonPlayerHealth : MonoBehaviour
     {
         if (Time.time > nextHit && collision.gameObject.CompareTag("PlayerShot"))
         {
-            print("PREDAMAGE: Non-Player Heatlh -> " + health);
             nextHit = Time.time + hitRate;
             health--;
-            print("POSTDAMAGE: Non-Player Heatlh -> " + health);
             if (health <= 0)
             {
                 ExplosionSoundScript.playShotSound();
