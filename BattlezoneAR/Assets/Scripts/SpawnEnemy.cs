@@ -27,7 +27,7 @@ public class SpawnEnemy : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            //Instantiate(enemyTank[i], spawnPoints[i].position, Quaternion.identity);
+            Instantiate(enemyTank[i], spawnPoints[i].position, Quaternion.identity);
             yield return new WaitForSeconds(10);
         }
 
