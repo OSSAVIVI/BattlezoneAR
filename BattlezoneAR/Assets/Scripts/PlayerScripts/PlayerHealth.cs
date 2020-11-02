@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -31,6 +32,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        print("Here");
+        print(collision.gameObject);
         if (Time.time > nextHit && collision.gameObject.CompareTag("EnemyShot"))
         {
             nextHit = Time.time + hitRate;

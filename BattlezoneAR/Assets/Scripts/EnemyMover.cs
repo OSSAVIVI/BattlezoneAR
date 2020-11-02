@@ -31,8 +31,14 @@ public class EnemyMover : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
-            transform.position += transform.forward * 1f * Time.deltaTime;
+            transform.position += transform.forward * 0.5f * Time.deltaTime;
         }
+        //else if (Vector3.Distance(transform.position, target.transform.position) > 0f)
+        //{
+        //    Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
+        //    //transform.position += transform.forward * 0.5f * Time.deltaTime;
+        //}
 
         // This tells us if the two objects are facing one another
 
