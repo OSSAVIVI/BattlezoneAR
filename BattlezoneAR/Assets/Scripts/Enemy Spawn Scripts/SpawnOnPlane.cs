@@ -30,8 +30,8 @@ public class SpawnOnPlane : MonoBehaviour
     [SerializeField]
     private ARPlaneManager arPlaneManager;
 
-    [SerializeField]
-    public GameObject target;
+    private GameObject target;
+    private Quaternion targetRotation;
 
 
     private void Awake()
@@ -41,7 +41,7 @@ public class SpawnOnPlane : MonoBehaviour
         arPlaneManager.planesChanged += PlaneChanged;
 
         target = GameObject.FindWithTag("MainCamera");
-        Quaternion targetRotation = target.transform.rotation;
+        targetRotation = target.transform.rotation;
 
         //Vector3 testPlayerPos = target.transform.position;
         //Vector3 testPlayerDir = target.transform.forward;
@@ -62,7 +62,7 @@ public class SpawnOnPlane : MonoBehaviour
         if(args.added != null && placedObject == null)
         {
             target = GameObject.FindWithTag("MainCamera");
-            Quaternion targetRotation = target.transform.rotation;
+            targetRotation = target.transform.rotation;
 
             ARPlane arPlane = args.added[0];
             placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
