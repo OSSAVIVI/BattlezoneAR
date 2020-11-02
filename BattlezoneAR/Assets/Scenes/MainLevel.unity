@@ -491,6 +491,46 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210022054422856375, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7701487747299673019, guid: 420ff04ff7fb240be95d1b61c94506e7,
         type: 3}
       propertyPath: m_Enabled
@@ -533,7 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 2791172425969076626, guid: 61e1e7a64e6491248a31517c07313f2f,
     type: 3}
-  m_DetectionMode: -1
+  m_DetectionMode: 1
 --- !u!114 &344147438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,7 +581,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 344147435}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa17d122634046b4a8e23048891fafc5, type: 3}
   m_Name: 
@@ -558,11 +598,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c16dcb9d6238f41959468b3db6ce41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arPosition: {fileID: 991023619}
-  placeablePrefab: {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4,
+  placedPrefab: {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4,
     type: 3}
-  touchPosition: {x: 0, y: 0}
-  cameraViewPosition: {x: 0, y: 0}
+  arPlaneManager: {fileID: 0}
+  target: {fileID: 0}
 --- !u!1 &778281357
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,12 +683,6 @@ Transform:
   m_Father: {fileID: 2092927008}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &991023619 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2788633038222468862, guid: 420ff04ff7fb240be95d1b61c94506e7,
-    type: 3}
-  m_PrefabInstance: {fileID: 344147434}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1554903208
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,7 +885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &2001836615
 BoxCollider:
   m_ObjectHideFlags: 0
