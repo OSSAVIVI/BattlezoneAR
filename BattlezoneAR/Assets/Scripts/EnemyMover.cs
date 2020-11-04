@@ -27,10 +27,13 @@ public class EnemyMover : MonoBehaviour
     {
         target = GameObject.FindWithTag("MainCamera");
 
-        if (Vector3.Distance(transform.position, target.transform.position) > 1f)
+        // This makes the enemy tanks "look" at the player
+        Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
+
+        // This makes the enemy tanks move toward the player
+        if (Vector3.Distance(transform.position, target.transform.position) > 1.2f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
             transform.position += transform.forward * 0.5f * Time.deltaTime;
         }
         //else if (Vector3.Distance(transform.position, target.transform.position) > 0f)
