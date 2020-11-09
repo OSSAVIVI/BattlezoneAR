@@ -33,10 +33,4 @@ public class SpawnEnemy : MonoBehaviour
 
         StartCoroutine(PrimaryEnemySpawn());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

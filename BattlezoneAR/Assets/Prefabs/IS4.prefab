@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  score: 1000
 --- !u!114 &8227893970216132682
 MonoBehaviour:
   m_ObjectHideFlags: 0

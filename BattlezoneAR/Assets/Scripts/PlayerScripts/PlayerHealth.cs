@@ -43,8 +43,7 @@ public class PlayerHealth : MonoBehaviour
             if (health <= 0)
             {
                 ExplosionSoundScript.playShotSound();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //currently reloads scene instead of killing player
-                //Destroy(gameObject);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
     }
@@ -76,6 +75,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void StopFlash()
     {
-        for (int i = 0; i < 3; i++) hitFlash[i].SetActive(false);
+        for (int i = 0; i < 3; i++)
+            hitFlash[i].SetActive(false);
     }
 }
