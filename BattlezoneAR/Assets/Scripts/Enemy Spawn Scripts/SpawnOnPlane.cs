@@ -31,7 +31,8 @@ public class SpawnOnPlane : MonoBehaviour
     private ARPlaneManager arPlaneManager;
 
     private GameObject target;
-    private Quaternion targetRotation;
+    //private Quaternion targetRotation;
+    private Vector3 targetVectorGround;
 
 
     private void Awake()
@@ -41,7 +42,7 @@ public class SpawnOnPlane : MonoBehaviour
         arPlaneManager.planesChanged += PlaneChanged;
 
         target = GameObject.FindWithTag("MainCamera");
-        targetRotation = target.transform.rotation;
+        //targetRotation = target.transform.rotation;
 
         //Vector3 testPlayerPos = target.transform.position;
         //Vector3 testPlayerDir = target.transform.forward;
@@ -59,14 +60,18 @@ public class SpawnOnPlane : MonoBehaviour
 
     private void PlaneChanged(ARPlanesChangedEventArgs args)
     {
-        if(args.added != null && placedObject == null)
+        if (args.added != null && placedObject == null)
         {
             target = GameObject.FindWithTag("MainCamera");
-            targetRotation = target.transform.rotation;
+            //targetRotation = target.transform.rotation;
+            //targetPositionGround.position = target.transform.position;
+            targetVectorGround = new Vector3(target.transform.position.x, 0.0f, target.transform.position.z);
+
+            //InGameLog.writeToLog(target.transform.position.ToString() + "\n" + targetVectorGround.ToString());
 
             ARPlane arPlane = args.added[0];
             placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
-            placedObject.transform.LookAt(target.transform);
+            placedObject.transform.LookAt(targetVectorGround);
         }
     }
 
