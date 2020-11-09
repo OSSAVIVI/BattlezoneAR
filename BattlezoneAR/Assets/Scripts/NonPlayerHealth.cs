@@ -5,6 +5,7 @@ using UnityEngine;
 public class NonPlayerHealth : MonoBehaviour
 {
     public int health;
+    public int score;
     private float hitRate;
     private float nextHit;  
     void Start()
@@ -22,6 +23,7 @@ public class NonPlayerHealth : MonoBehaviour
             if (health <= 0)
             {
                 ExplosionSoundScript.playShotSound();
+                PlayerPrefs.SetInt("PlayerScore", PlayerPrefs.GetInt("PlayerScore") + score);
                 Destroy(gameObject);
             }
         }
