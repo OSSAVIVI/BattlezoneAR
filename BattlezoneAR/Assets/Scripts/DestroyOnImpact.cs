@@ -15,7 +15,8 @@ public class DestroyOnImpact : MonoBehaviour
         string message = gameObject.name;
         message = message + transform.position.ToString();
         message = message + ", collided with: " + collision.gameObject;
-        message = message + "Collision position/transform: " + collision.gameObject.transform.position;
+        message = message + "\nCollision position/transform: " + collision.gameObject.transform.position;
+        message = message + "\nBullet Size: " + transform.lossyScale.ToString();
         //InGameLog.writeToLog(message);
         Destroy(gameObject);
     }

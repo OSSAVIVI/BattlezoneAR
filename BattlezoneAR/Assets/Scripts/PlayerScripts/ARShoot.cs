@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class ARShoot : MonoBehaviour
@@ -11,12 +12,14 @@ public class ARShoot : MonoBehaviour
     public Rigidbody[] projectile;
     public Transform shotSpawn;
 
+    private Rigidbody shot;
+
     private void Start()
     {
         isShooting = false;
         shootRate = 1f;
         nextShoot = -1f;
-        shootForce = 1500f;
+        shootForce = 150f;
     }
 
     public void BeginShooting()
@@ -34,7 +37,7 @@ public class ARShoot : MonoBehaviour
         if (isShooting && Time.time > nextShoot)
         {
             nextShoot = Time.time + shootRate;
-            Rigidbody shot = Instantiate(projectile[0], shotSpawn.position, shotSpawn.rotation);
+            shot = Instantiate(projectile[0], shotSpawn.position, shotSpawn.rotation);
             shot.AddForce(shotSpawn.forward * shootForce);
             SoundManagerScript.playShotSound();
         }

@@ -25,11 +25,11 @@ public class SpawnEnemy : MonoBehaviour
 
     IEnumerator PrimaryEnemySpawn()
     {
-        for (int i = 0; i < 3; i++)
-        {
-            Instantiate(enemyTank[i], spawnPoints[i].position, Quaternion.identity);
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    Instantiate(enemyTank[i], spawnPoints[i].position, Quaternion.identity);
             yield return new WaitForSeconds(10);
-        }
+        //}
 
         StartCoroutine(PrimaryEnemySpawn());
     }
