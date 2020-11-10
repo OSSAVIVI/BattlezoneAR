@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
     {
         print("Here");
         print(collision.gameObject);
-        if (Time.time > nextHit && collision.gameObject.CompareTag("EnemyShot"))
+        if (Time.time > nextHit && (collision.gameObject.CompareTag("EnemyShot") || collision.gameObject.CompareTag("Missile")))
         {
             nextHit = Time.time + hitRate;
             flashOn = true;
