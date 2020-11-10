@@ -36,6 +36,7 @@ public class SpawnOnPlane : MonoBehaviour
     private GameObject target;
     //private Quaternion targetRotation;
     private Vector3 targetVectorGround;
+    private Vector3 spawnOnARPlane;
 
 
     private void Awake()
@@ -147,7 +148,8 @@ public class SpawnOnPlane : MonoBehaviour
                 //InGameLog.writeToLog(message);
 
                 targetVectorGround = new Vector3(target.transform.position.x, arPlane.transform.position.y + 0.05f, target.transform.position.z);
-                placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
+                spawnOnARPlane = new Vector3(arPlane.transform.position.x, arPlane.transform.position.y + 0.05f, arPlane.transform.position.z);
+                placedObject = Instantiate(placedPrefab, spawnOnARPlane, Quaternion.identity);
                 placedObject.transform.LookAt(targetVectorGround);
 
                 //ARPlane arPlane = args.added[0];
