@@ -104,6 +104,9 @@ public class EnemyMover : MonoBehaviour
             && (Physics.Raycast(transform.position, Vector3.down, 0.1f))
             )
         {
+            // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
+            // Can't just look up, because it hits itself
+            // Need to check what it is hitting slightly both up and down and confirm that it is an AR plane, not itself
             message += "2. Here\n";
             message += (Physics.Raycast(transform.position, Vector3.down, 0.1f)).ToString() + "\n" + (Physics.Raycast(transform.position, Vector3.up, 0.1f)).ToString();
             transform.position += transform.forward * 0.1f * Time.deltaTime;
