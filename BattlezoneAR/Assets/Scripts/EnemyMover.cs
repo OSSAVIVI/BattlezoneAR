@@ -89,7 +89,7 @@ public class EnemyMover : MonoBehaviour
 
         
         //List<ARRaycastHit> hitInfo = new List<ARRaycastHit>();
-        string message = "1. Here\n";
+        //string message = "1. Here\n";
         //message += (transform.position.x).ToString() + " " + (transform.position.z).ToString() + "\n";
         //message += (target.transform.position.x).ToString() + " " + (target.transform.position.z).ToString() + "\n";
         
@@ -107,12 +107,12 @@ public class EnemyMover : MonoBehaviour
             // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
             // Can't just look up, because it hits itself
             // Need to check what it is hitting slightly both up and down and confirm that it is an AR plane, not itself
-            message += "2. Here\n";
-            message += (Physics.Raycast(transform.position, Vector3.down, 0.1f)).ToString() + "\n" + (Physics.Raycast(transform.position, Vector3.up, 0.1f)).ToString();
+            //message += "2. Here\n";
+            //message += (Physics.Raycast(transform.position, Vector3.down, 0.1f)).ToString() + "\n" + (Physics.Raycast(transform.position, Vector3.up, 0.1f)).ToString();
             transform.position += transform.forward * 0.1f * Time.deltaTime;
         }
 
-        InGameLog.writeToLog(message);
+        //InGameLog.writeToLog(message);
         //else if (Vector3.Distance(transform.position, target.transform.position) > 0f)
         //{
         //    Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
