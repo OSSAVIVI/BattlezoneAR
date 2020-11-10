@@ -23,6 +23,9 @@ public class SpawnOnPlane : MonoBehaviour
     //public Vector2 touchPosition;
     //public Vector2 cameraViewPosition;
 
+    static List<ARPlane> arPlanesTracking = new List<ARPlane>();
+    //static List<ARPlane> arPlanesRemoved = new List<ARPlane>();
+
     [SerializeField]
     private GameObject placedPrefab;
     private GameObject placedObject;
@@ -60,10 +63,70 @@ public class SpawnOnPlane : MonoBehaviour
 
     private void PlaneChanged(ARPlanesChangedEventArgs args)
     {
-        if ((args.added != null 
-            || args.updated != null)
-            && placedObject == null
-            )
+        //string message = "1. Here\n";
+        //message += (arPlaneManager.trackables).ToString();
+        //foreach (ARPlane plane in arPlaneManager.trackables)
+        //{
+        //    message += plane.transform.position.ToString() + '\n';
+        //}
+        //InGameLog.writeToLog(message);
+
+        string message = "1. Here\n";
+        //arPlanes.Add(args.added[0]);
+        //message += (arPlanes).ToString();
+        //message += (arPlaneManager.planeCount).ToString;
+        //message += "ADDED: " + args.added.Count.ToString() + "\n";
+        //message += "UPDATED: " + args.updated.Count.ToString() + "\n";
+        //message += "DELETED: " + args.removed.Count.ToString() + "\n";
+
+        //foreach (ARPlane plane in arPlaneManager.trackables)
+        //{
+        //    message += plane.transform.position.ToString() + '\n';
+        //}
+
+        for (int i = 0; i < args.added.Count; i++)
+        {
+            if (!arPlanesTracking.Contains(args.added[0]))
+            {
+                arPlanesTracking.Add(args.added[0]);
+            }
+        }
+
+        for (int j = arPlanesTracking.Count - 1; j >= 0 ; j--)
+        {
+            if (arPlanesTracking[j].trackingState.ToString() != "Tracking")
+            {
+                //arPlanesAdded[j].SetActive(false);
+                arPlanesTracking.Remove(arPlanesTracking[j]);
+            } 
+        }
+
+
+        for (int j = 0; j < arPlanesTracking.Count; j++)
+        {
+            message += arPlanesTracking[j].transform.position.ToString() + ' ' + arPlanesTracking[j].trackingState.ToString() + '\n';
+        }
+
+
+
+        //for (int j = 0; j < arPlanesRemoved.Count; j++)
+        //{
+        //    message += "X" + arPlanesRemoved[j].transform.position.ToString() + ' ' + arPlanesRemoved[j].trackingState.ToString() + '\n';
+        //}
+
+
+        //for (int i = 0; i < args.removed.Count; i++)
+        //{
+        //    arPlanes.Add(args.removed[0]);
+        //}
+
+        //foreach (ARPlane plane in arPlaneManager.trackables)
+        //{
+        //    message += plane.transform.position.ToString() + '\n';
+        //}
+        //InGameLog.writeToLog(message);
+
+        if (arPlanesTracking.Count > 0 && placedObject == null)
         {
             target = GameObject.FindWithTag("MainCamera");
             //targetRotation = target.transform.rotation;
@@ -71,13 +134,28 @@ public class SpawnOnPlane : MonoBehaviour
 
             //InGameLog.writeToLog(target.transform.position.ToString() + "\n" + targetVectorGround.ToString());
 
-            if (args.added[0] != null)
+            if (arPlanesTracking[0] != null)
             {
-                ARPlane arPlane = args.added[0];
+                System.Random randomSeed = new System.Random();
+                int randomIndex = randomSeed.Next(0, arPlanesTracking.Count);
+                ARPlane arPlane = arPlanesTracking[randomIndex];
+
+                //List<Vector3> boundaryOut = new List<Vector3>();
+                //arPlane.TryGetBoundary(boundaryOut);
+
+                //message = arPlane.ToString() + "\n";
+                //InGameLog.writeToLog(message);
+
                 targetVectorGround = new Vector3(target.transform.position.x, arPlane.transform.position.y + 0.05f, target.transform.position.z);
                 placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
                 placedObject.transform.LookAt(targetVectorGround);
-            } 
+
+                //ARPlane arPlane = args.added[0];
+                //targetVectorGround = new Vector3(target.transform.position.x, arPlane.transform.position.y + 0.05f, target.transform.position.z);
+                //placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
+                //placedObject.transform.LookAt(targetVectorGround);
+
+            }
             //else if (args.updated != null)
             //{
             //    ARPlane arPlane = args.added[0];
