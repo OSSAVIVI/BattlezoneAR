@@ -12,7 +12,7 @@ public class SpawnMissile : MonoBehaviour
 
     void Update()
     {
-        if (PlayerPrefs.GetInt("PlayerScore") > 10000 && !missileSpanwed)
+        if (PlayerPrefs.GetInt("PlayerScore") >= 10000 && !missileSpanwed)
         {
             StartCoroutine(PrimaryEnemySpawn());
             missileSpanwed = true;

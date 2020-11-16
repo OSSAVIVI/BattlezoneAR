@@ -10,7 +10,10 @@ public class MissileHealth : MonoBehaviour
         if (!collision.gameObject.CompareTag("EnemyShot"))
         {
             ExplosionSoundScript.playShotSound();
-            PlayerPrefs.SetInt("PlayerScore", PlayerPrefs.GetInt("PlayerScore") + score);
+            if (collision.gameObject.CompareTag("PlayerShot"))
+            {
+                PlayerPrefs.SetInt("PlayerScore", PlayerPrefs.GetInt("PlayerScore") + score);
+            }
             Destroy(gameObject);
         }
     }
