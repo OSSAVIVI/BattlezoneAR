@@ -23,20 +23,22 @@ public class SpawnOnPlane : MonoBehaviour
     //public Vector2 touchPosition;
     //public Vector2 cameraViewPosition;
 
-    static List<ARPlane> arPlanesTracking = new List<ARPlane>();
-    //static List<ARPlane> arPlanesRemoved = new List<ARPlane>();
+    static List<ARPlane> arPlanesTracking;
+    static List<ARPlane> arPlanesRemoved;
 
     [SerializeField]
     private GameObject placedPrefab;
     private GameObject placedObject;
 
     [SerializeField]
-    private ARPlaneManager arPlaneManager;
+    public ARPlaneManager arPlaneManager;
 
     private GameObject target;
     //private Quaternion targetRotation;
     private Vector3 targetVectorGround;
     private Vector3 spawnOnARPlane;
+
+    private string message = "";
 
 
     private void Awake()
@@ -44,8 +46,11 @@ public class SpawnOnPlane : MonoBehaviour
         //raycastManager = GetComponent<ARRaycastManager>();
         arPlaneManager = GetComponent<ARPlaneManager>();
         arPlaneManager.planesChanged += PlaneChanged;
-
         target = GameObject.FindWithTag("MainCamera");
+
+        arPlanesTracking = new List<ARPlane>();
+        arPlanesRemoved = new List<ARPlane>();
+
         //targetRotation = target.transform.rotation;
 
         //Vector3 testPlayerPos = target.transform.position;
@@ -64,6 +69,17 @@ public class SpawnOnPlane : MonoBehaviour
 
     private void PlaneChanged(ARPlanesChangedEventArgs args)
     {
+        message = "\n";
+
+        //int count = 0;
+        //foreach (var plane in arPlaneManager.trackables)
+        //{
+        //    count++;
+        //}
+
+        //message = "COUNT: " + count + '\n';
+
+        //InGameLog.writeToLog(message);
         //string message = "1. Here\n";
         //message += (arPlaneManager.trackables).ToString();
         //foreach (ARPlane plane in arPlaneManager.trackables)
@@ -72,7 +88,7 @@ public class SpawnOnPlane : MonoBehaviour
         //}
         //InGameLog.writeToLog(message);
 
-        string message = "1. Here\n";
+
         //arPlanes.Add(args.added[0]);
         //message += (arPlanes).ToString();
         //message += (arPlaneManager.planeCount).ToString;
@@ -87,32 +103,55 @@ public class SpawnOnPlane : MonoBehaviour
 
         for (int i = 0; i < args.added.Count; i++)
         {
-            if (!arPlanesTracking.Contains(args.added[0]))
+            if (!arPlanesTracking.Contains(args.added[i]))
             {
-                arPlanesTracking.Add(args.added[0]);
+                arPlanesTracking.Add(args.added[i]);
+                args.added[i].destroyOnRemoval = true;
             }
         }
 
-        for (int j = arPlanesTracking.Count - 1; j >= 0 ; j--)
+        for (int j = arPlanesTracking.Count - 1; j >= 0; j--)
         {
             if (arPlanesTracking[j].trackingState.ToString() != "Tracking")
             {
-                //arPlanesAdded[j].SetActive(false);
+                
+                arPlanesTracking[j].gameObject.SetActive(false);
+                arPlanesRemoved.Add(arPlanesTracking[j]);
                 arPlanesTracking.Remove(arPlanesTracking[j]);
-            } 
+            }
         }
 
-
-        for (int j = 0; j < arPlanesTracking.Count; j++)
+        for (int j = arPlanesRemoved.Count - 1; j >= 0; j--)
         {
-            message += arPlanesTracking[j].transform.position.ToString() + ' ' + arPlanesTracking[j].trackingState.ToString() + '\n';
+            if (arPlanesRemoved[j].trackingState.ToString() == "Tracking")
+            {
+
+                arPlanesRemoved[j].gameObject.SetActive(true);
+                arPlanesTracking.Add(arPlanesRemoved[j]);
+                arPlanesRemoved.Remove(arPlanesRemoved[j]);
+            }
         }
+
+        //for (int j = 0; j < arPlanesTracking.Count; j++)
+        //{
+        //    message += "CENT: " + arPlanesTracking[j].center.ToString() + '\n'
+        //        + "ALI: " + arPlanesTracking[j].alignment.ToString() + '\n';
+        //        foreach (var bound in arPlanesTracking[j].boundary)
+        //        {
+        //        message += "BOUND: " + bound.ToString() + '\n';
+        //        }
+        //        //+ "CENTIPS: " + arPlanesTracking[j].centerInPlaneSpace.ToString() + '\n'
+        //        message += "EXTENTS: " + arPlanesTracking[j].extents.ToString() + '\n'
+        //        //+ "STATE: " + arPlanesTracking[j].trackingState.ToString() 
+        //        + '\n';
+        //}
 
 
 
         //for (int j = 0; j < arPlanesRemoved.Count; j++)
         //{
-        //    message += "X" + arPlanesRemoved[j].transform.position.ToString() + ' ' + arPlanesRemoved[j].trackingState.ToString() + '\n';
+        //    message += "X:" + "CENTER: " + arPlanesRemoved[j].center.ToString() + ' ' 
+        //        + arPlanesRemoved[j].trackingState.ToString() + '\n';
         //}
 
 
@@ -125,6 +164,7 @@ public class SpawnOnPlane : MonoBehaviour
         //{
         //    message += plane.transform.position.ToString() + '\n';
         //}
+
         //InGameLog.writeToLog(message);
 
         if (arPlanesTracking.Count > 0 && placedObject == null)
@@ -141,14 +181,29 @@ public class SpawnOnPlane : MonoBehaviour
                 int randomIndex = randomSeed.Next(0, arPlanesTracking.Count);
                 ARPlane arPlane = arPlanesTracking[randomIndex];
 
+                //message += arPlane.boundary.ToString();
+                //message += "CENT: " + arPlanesTracking[j].center.ToString() + '\n'
+                //+ "ALI: " + arPlanesTracking[j].alignment.ToString() + '\n';
+                foreach (var bound in arPlane.boundary)
+                {
+                    message += "BOUND: " + bound.ToString() + ", ";
+                }
+                message += '\n';
+                //+ "CENTIPS: " + arPlanesTracking[j].centerInPlaneSpace.ToString() + '\n'
+                //message += "EXTENTS: " + arPlanesTracking[j].extents.ToString() + '\n'
+                ////+ "STATE: " + arPlanesTracking[j].trackingState.ToString() 
+                //+ '\n';
+
+
+
                 //List<Vector3> boundaryOut = new List<Vector3>();
                 //arPlane.TryGetBoundary(boundaryOut);
 
                 //message = arPlane.ToString() + "\n";
-                //InGameLog.writeToLog(message);
+                InGameLog.writeToLog(message);
 
-                targetVectorGround = new Vector3(target.transform.position.x, arPlane.transform.position.y + 0.05f, target.transform.position.z);
-                spawnOnARPlane = new Vector3(arPlane.transform.position.x, arPlane.transform.position.y + 0.05f, arPlane.transform.position.z);
+                targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
+                spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
                 placedObject = Instantiate(placedPrefab, spawnOnARPlane, Quaternion.identity);
                 placedObject.transform.LookAt(targetVectorGround);
 

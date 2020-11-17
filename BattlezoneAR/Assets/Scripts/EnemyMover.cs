@@ -87,22 +87,26 @@ public class EnemyMover : MonoBehaviour
 
         //InGameLog.writeToLog(inPlane.ToString());
 
-        
+
         //List<ARRaycastHit> hitInfo = new List<ARRaycastHit>();
         //string message = "1. Here\n";
         //message += (transform.position.x).ToString() + " " + (transform.position.z).ToString() + "\n";
         //message += (target.transform.position.x).ToString() + " " + (target.transform.position.z).ToString() + "\n";
-        
+
 
         //message += (Physics.Raycast(transform.position, Vector3.down, hitInfo, 0.1f).ToString() + "\n";
         //message += (Physics.Raycast(transform.position, Vector3.up, hitInfo, 0.1f).ToString() + "\n";
 
+        //string message = "DIST: " + Vector3.Distance(targetVectorARGround, transform.position).ToString() + '\n';
+        //RaycastHit hitInfo;
+        //Physics.Raycast(transform.position, Vector3.down, out hitInfo, 0.1f);
+        //message += "AR DIST: " + hitInfo.distance.ToString() + '\n';
+        //message += "LAND: " + hitInfo.collider.ToString() + '\n';
+        //message += "LAND Name: " + hitInfo.collider.gameObject.ToString() + '\n';
+        //InGameLog.writeToLog(message);
+
         // This makes the enemy tanks move toward the player
-        if (
-            Math.Abs(transform.position.x - target.transform.position.x) > 0.3f
-            && Math.Abs(transform.position.z - target.transform.position.z) > 0.3f
-            && (Physics.Raycast(transform.position, Vector3.down, 0.1f))
-            )
+        if (Vector3.Distance(targetVectorARGround, transform.position) > 0.5f && (Physics.Raycast(transform.position, Vector3.down, 0.1f)))
         {
             // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
             // Can't just look up, because it hits itself
