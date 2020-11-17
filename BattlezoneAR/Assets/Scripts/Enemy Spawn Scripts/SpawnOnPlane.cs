@@ -6,217 +6,137 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-// Adds ARRaycastManager class to any object with this script
-//[RequireComponent(typeof(ARRaycastManager))]
 [RequireComponent(typeof(ARPlaneManager))]
 public class SpawnOnPlane : MonoBehaviour
 {
-    //private ARRaycastManager raycastManager;
-    //private GameObject enemyObject;
-    //public Transform arPosition;
-
-    //[SerializeField]
-    //private GameObject placeablePrefab;
-
-    //static List<ARRaycastHit> raycastHits = new List<ARRaycastHit>();
-
-    //public Vector2 touchPosition;
-    //public Vector2 cameraViewPosition;
-
-    static List<ARPlane> arPlanesTracking = new List<ARPlane>();
-    //static List<ARPlane> arPlanesRemoved = new List<ARPlane>();
+    static List<ARPlane> arPlanesTracking;
+    static List<ARPlane> arPlanesRemoved;
 
     [SerializeField]
     private GameObject placedPrefab;
     private GameObject placedObject;
 
     [SerializeField]
-    private ARPlaneManager arPlaneManager;
+    public ARPlaneManager arPlaneManager;
 
     private GameObject target;
-    //private Quaternion targetRotation;
     private Vector3 targetVectorGround;
     private Vector3 spawnOnARPlane;
 
-
     private void Awake()
     {
-        //raycastManager = GetComponent<ARRaycastManager>();
+        // Add function to event to track reliable AR planes
         arPlaneManager = GetComponent<ARPlaneManager>();
         arPlaneManager.planesChanged += PlaneChanged;
 
-        target = GameObject.FindWithTag("MainCamera");
-        //targetRotation = target.transform.rotation;
-
-        //Vector3 testPlayerPos = target.transform.position;
-        //Vector3 testPlayerDir = target.transform.forward;
-        //float spawnDis = 2;
-
-        //Vector3 testSpawnPos = testPlayerPos + testPlayerDir*spawnDis;
-
-        //print(targetRotation);
-
-        //placedObject = Instantiate(placedPrefab, testSpawnPos, targetRotation);
-
-        //ARPlane arPlane = args.added[0];
-        //placedObject = Instantiate(placedPrefab, arPlane.transform.position, targetRotation);
+        // Create new lists for AR planes tracked in this scene
+        arPlanesTracking = new List<ARPlane>();
+        arPlanesRemoved = new List<ARPlane>();
     }
 
+    private void Start()
+    {
+        // Start spawning tanks on AR planes
+        StartCoroutine(SpawnTanksAR());
+    }
+
+    // Add and remove planes based on their tracking status
     private void PlaneChanged(ARPlanesChangedEventArgs args)
     {
-        //string message = "1. Here\n";
-        //message += (arPlaneManager.trackables).ToString();
-        //foreach (ARPlane plane in arPlaneManager.trackables)
-        //{
-        //    message += plane.transform.position.ToString() + '\n';
-        //}
-        //InGameLog.writeToLog(message);
-
-        string message = "1. Here\n";
-        //arPlanes.Add(args.added[0]);
-        //message += (arPlanes).ToString();
-        //message += (arPlaneManager.planeCount).ToString;
-        //message += "ADDED: " + args.added.Count.ToString() + "\n";
-        //message += "UPDATED: " + args.updated.Count.ToString() + "\n";
-        //message += "DELETED: " + args.removed.Count.ToString() + "\n";
-
-        //foreach (ARPlane plane in arPlaneManager.trackables)
-        //{
-        //    message += plane.transform.position.ToString() + '\n';
-        //}
-
+        // Add planes to tracking and make sure they are destroyed
+        // on removal
         for (int i = 0; i < args.added.Count; i++)
         {
-            if (!arPlanesTracking.Contains(args.added[0]))
+            if (!arPlanesTracking.Contains(args.added[i]))
             {
-                arPlanesTracking.Add(args.added[0]);
+                arPlanesTracking.Add(args.added[i]);
+                args.added[i].destroyOnRemoval = true;
             }
         }
 
-        for (int j = arPlanesTracking.Count - 1; j >= 0 ; j--)
+        // Don't track planes that aren't reliable, remove active
+        for (int j = arPlanesTracking.Count - 1; j >= 0; j--)
         {
             if (arPlanesTracking[j].trackingState.ToString() != "Tracking")
             {
-                //arPlanesAdded[j].SetActive(false);
+                arPlanesTracking[j].gameObject.SetActive(false);
+                arPlanesRemoved.Add(arPlanesTracking[j]);
                 arPlanesTracking.Remove(arPlanesTracking[j]);
-            } 
+            }
         }
 
-
-        for (int j = 0; j < arPlanesTracking.Count; j++)
+        // Track planes that switch back to reliable, set active
+        for (int j = arPlanesRemoved.Count - 1; j >= 0; j--)
         {
-            message += arPlanesTracking[j].transform.position.ToString() + ' ' + arPlanesTracking[j].trackingState.ToString() + '\n';
-        }
-
-
-
-        //for (int j = 0; j < arPlanesRemoved.Count; j++)
-        //{
-        //    message += "X" + arPlanesRemoved[j].transform.position.ToString() + ' ' + arPlanesRemoved[j].trackingState.ToString() + '\n';
-        //}
-
-
-        //for (int i = 0; i < args.removed.Count; i++)
-        //{
-        //    arPlanes.Add(args.removed[0]);
-        //}
-
-        //foreach (ARPlane plane in arPlaneManager.trackables)
-        //{
-        //    message += plane.transform.position.ToString() + '\n';
-        //}
-        //InGameLog.writeToLog(message);
-
-        if (arPlanesTracking.Count > 0 && placedObject == null)
-        {
-            target = GameObject.FindWithTag("MainCamera");
-            //targetRotation = target.transform.rotation;
-            //targetPositionGround.position = target.transform.position;
-
-            //InGameLog.writeToLog(target.transform.position.ToString() + "\n" + targetVectorGround.ToString());
-
-            if (arPlanesTracking[0] != null)
+            if (arPlanesRemoved[j].trackingState.ToString() == "Tracking")
             {
+
+                arPlanesRemoved[j].gameObject.SetActive(true);
+                arPlanesTracking.Add(arPlanesRemoved[j]);
+                arPlanesRemoved.Remove(arPlanesRemoved[j]);
+            }
+        }
+    }
+
+    // Spawn tanks onto planes during the scene
+    IEnumerator SpawnTanksAR()
+    {
+        // If there are reliable AR planes and there is no tank
+        if(arPlanesTracking.Count > 0)
+        {
+            if (arPlanesTracking[0] != null > 0 && placedObject == null)
+            {
+                // Get a random AR plane
                 System.Random randomSeed = new System.Random();
                 int randomIndex = randomSeed.Next(0, arPlanesTracking.Count);
                 ARPlane arPlane = arPlanesTracking[randomIndex];
 
-                //List<Vector3> boundaryOut = new List<Vector3>();
-                //arPlane.TryGetBoundary(boundaryOut);
+                // Find random valid spawn point above plane, if something
+                // weird happens spawn in middle of plane
+                int limit = 0;
+                do
+                {
+                    if (limit == 5)
+                    {
+                        spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
+                    }
+                    else
+                    {
+                        // Random x, z offset from center of AR plane
+                        // May sometimes not be above actual plane
+                        // Limit attempts to find point above plane to 4
+                        Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
+                        Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
 
-                //message = arPlane.ToString() + "\n";
-                //InGameLog.writeToLog(message);
+                        double rangeX = (double)max.x - (double)min.x;
+                        double sampleX = randomSeed.NextDouble();
+                        double scaledX = (sampleX * rangeX) + min.x;
+                        float randX = (float)scaledX;
 
-                targetVectorGround = new Vector3(target.transform.position.x, arPlane.transform.position.y + 0.05f, target.transform.position.z);
-                spawnOnARPlane = new Vector3(arPlane.transform.position.x, arPlane.transform.position.y + 0.05f, arPlane.transform.position.z);
+                        double rangeZ = (double)max.z - (double)min.z;
+                        double sampleZ = randomSeed.NextDouble();
+                        double scaledZ = (sampleZ * rangeZ) + min.z;
+                        float randZ = (float)scaledZ;
+
+                        spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+                    }
+
+                    limit++;
+
+                } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 5));
+
+                // Place tank at AR spawn point
                 placedObject = Instantiate(placedPrefab, spawnOnARPlane, Quaternion.identity);
+
+                // Rotate tank to face player 
+                target = GameObject.FindWithTag("MainCamera");
+                targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
                 placedObject.transform.LookAt(targetVectorGround);
-
-                //ARPlane arPlane = args.added[0];
-                //targetVectorGround = new Vector3(target.transform.position.x, arPlane.transform.position.y + 0.05f, target.transform.position.z);
-                //placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
-                //placedObject.transform.LookAt(targetVectorGround);
-
             }
-            //else if (args.updated != null)
-            //{
-            //    ARPlane arPlane = args.added[0];
-            //    placedObject = Instantiate(placedPrefab, arPlane.transform.position, Quaternion.identity);
-            //    placedObject.transform.LookAt(targetVectorGround);
-            //}
-
         }
+
+        // Wait two seconds then start again
+        yield return new WaitForSeconds(5);
+        StartCoroutine(SpawnTanksAR());
     }
-
-
-
-    //// Gets where the user presses on the screen
-    //bool TryGetTouchPosition(out Vector2 touchPosition)
-    //{
-    //    if (Input.touchCount > 0)
-    //    {
-    //        touchPosition = Input.GetTouch(0).position;
-    //        return true;
-    //    }
-
-    //    touchPosition = default;
-    //    return false;
-    //}
-
-    //private void Update()
-    //{
-    //    if(TryGetTouchPosition(out Vector2 touchPosition))
-    //    {
-    //        if (raycastManager.Raycast(touchPosition, raycastHits, UnityEngine.XR.ARSubsystems.TrackableType.PlaneWithinPolygon))
-    //        {
-    //            var hitPose = raycastHits[0].pose;
-    //            enemyObject = Instantiate(placeablePrefab, hitPose.position, hitPose.rotation);
-    //        }
-    //    }
-    //}
-
-    //public Transform[] spawnPoints;
-    //public GameObject[] enemyTank;
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    //spawnSpot = new Vector3(15,0,15);
-    //    //GameObject player = GameObject.FindWithTag("Player");
-    //    //Instantiate(newTank, spawnSpot, transform.rotation);
-
-    //    StartCoroutine(PrimaryEnemySpawn());
-    //}
-
-    //IEnumerator PrimaryEnemySpawn()
-    //{
-    //    for (int i = 0; i < 3; i++)
-    //    {
-    //        Instantiate(enemyTank[i], spawnPoints[i].position, Quaternion.identity);
-    //        yield return new WaitForSeconds(10);
-    //    }
-
-    //    StartCoroutine(PrimaryEnemySpawn());
-    //}
-
-
 }
