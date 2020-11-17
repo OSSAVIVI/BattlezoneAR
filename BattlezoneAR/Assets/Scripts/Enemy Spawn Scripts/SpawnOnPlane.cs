@@ -181,30 +181,45 @@ public class SpawnOnPlane : MonoBehaviour
                 int randomIndex = randomSeed.Next(0, arPlanesTracking.Count);
                 ARPlane arPlane = arPlanesTracking[randomIndex];
 
-                //message += arPlane.boundary.ToString();
-                //message += "CENT: " + arPlanesTracking[j].center.ToString() + '\n'
-                //+ "ALI: " + arPlanesTracking[j].alignment.ToString() + '\n';
-                foreach (var bound in arPlane.boundary)
+                int limit = 0;
+                do
                 {
-                    message += "BOUND: " + bound.ToString() + ", ";
-                }
-                message += '\n';
-                //+ "CENTIPS: " + arPlanesTracking[j].centerInPlaneSpace.ToString() + '\n'
-                //message += "EXTENTS: " + arPlanesTracking[j].extents.ToString() + '\n'
-                ////+ "STATE: " + arPlanesTracking[j].trackingState.ToString() 
-                //+ '\n';
+                    Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
+                    Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
+
+                    double rangeX = (double)max.x - (double)min.x;
+                    double sampleX = randomSeed.NextDouble();
+                    double scaledX = (sampleX * rangeX) + min.x;
+                    float randX = (float)scaledX;
+
+                    double rangeZ = (double)max.z - (double)min.z;
+                    double sampleZ = randomSeed.NextDouble();
+                    double scaledZ = (sampleZ * rangeZ) + min.z;
+                    float randZ = (float)scaledZ;
+
+
+                    spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+
+                    message += "1: " + randX.ToString() + '\n'
+                    + "2: " + min.y.ToString() + '\n'
+                    + "2.1: " + max.y.ToString() + '\n'
+                    + "3: " + randZ.ToString() + '\n'
+                    + "min: " + min.ToString() + '\n'
+                    + "max: " + max.ToString() + '\n'
+                    + "center" + arPlane.center + '\n'
+                    + "IN PLANE: " + Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f).ToString();
+
+                    InGameLog.writeToLog(message);
+
+
+                    limit++;
+                } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 50));
 
 
 
-                //List<Vector3> boundaryOut = new List<Vector3>();
-                //arPlane.TryGetBoundary(boundaryOut);
-
-                //message = arPlane.ToString() + "\n";
-                InGameLog.writeToLog(message);
+                placedObject = Instantiate(placedPrefab, spawnOnARPlane, Quaternion.identity);
 
                 targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
-                spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
-                placedObject = Instantiate(placedPrefab, spawnOnARPlane, Quaternion.identity);
                 placedObject.transform.LookAt(targetVectorGround);
 
                 //ARPlane arPlane = args.added[0];
