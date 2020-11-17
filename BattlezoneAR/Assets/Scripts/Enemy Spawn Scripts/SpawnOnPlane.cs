@@ -184,36 +184,42 @@ public class SpawnOnPlane : MonoBehaviour
                 int limit = 0;
                 do
                 {
-                    Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
-                    Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
+                    if (limit == 5)
+                    {
+                        spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
+                    } else
+                    {
+                        Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
+                        Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
 
-                    double rangeX = (double)max.x - (double)min.x;
-                    double sampleX = randomSeed.NextDouble();
-                    double scaledX = (sampleX * rangeX) + min.x;
-                    float randX = (float)scaledX;
+                        double rangeX = (double)max.x - (double)min.x;
+                        double sampleX = randomSeed.NextDouble();
+                        double scaledX = (sampleX * rangeX) + min.x;
+                        float randX = (float)scaledX;
 
-                    double rangeZ = (double)max.z - (double)min.z;
-                    double sampleZ = randomSeed.NextDouble();
-                    double scaledZ = (sampleZ * rangeZ) + min.z;
-                    float randZ = (float)scaledZ;
+                        double rangeZ = (double)max.z - (double)min.z;
+                        double sampleZ = randomSeed.NextDouble();
+                        double scaledZ = (sampleZ * rangeZ) + min.z;
+                        float randZ = (float)scaledZ;
 
 
-                    spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+                        spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+                        message = "1: " + randX.ToString() + '\n'
+                            //+ "2: " + min.y.ToString() + '\n'
+                            //+ "2.1: " + max.y.ToString() + '\n'
+                            + "3: " + randZ.ToString() + '\n'
+                            //+ "min: " + min.ToString() + '\n'
+                            + "max: " + max.ToString() + '\n'
+                            + "center" + arPlane.center + '\n'
+                            + "IN PLANE: " + Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f).ToString() + '\n'
+                            + "LIMIT: " + limit.ToString() + '\n'
+                            + "SPAWN: " + spawnOnARPlane.ToString() + '\n';
 
-                    message += "1: " + randX.ToString() + '\n'
-                    + "2: " + min.y.ToString() + '\n'
-                    + "2.1: " + max.y.ToString() + '\n'
-                    + "3: " + randZ.ToString() + '\n'
-                    + "min: " + min.ToString() + '\n'
-                    + "max: " + max.ToString() + '\n'
-                    + "center" + arPlane.center + '\n'
-                    + "IN PLANE: " + Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f).ToString();
-
-                    InGameLog.writeToLog(message);
-
+                        InGameLog.writeToLog(message);
+                    }
 
                     limit++;
-                } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 50));
+                } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 5));
 
 
 
