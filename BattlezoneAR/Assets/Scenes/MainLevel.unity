@@ -489,7 +489,7 @@ PrefabInstance:
     - target: {fileID: 1480245661427455828, guid: 420ff04ff7fb240be95d1b61c94506e7,
         type: 3}
       propertyPath: m_UiScaleMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1480245661427455828, guid: 420ff04ff7fb240be95d1b61c94506e7,
         type: 3}
