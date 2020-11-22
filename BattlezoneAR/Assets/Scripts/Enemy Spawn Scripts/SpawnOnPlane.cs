@@ -91,7 +91,7 @@ public class SpawnOnPlane : MonoBehaviour
             StartCoroutine(SpawnTanksAR());
         } else
         {
-            alertMessage = "LOOK AROUND SLOWLY";
+            alertMessage = "LOOK AROUND SLOWLY FOR TANK PORTALS";
             AlertLog.write(alertMessage);
             yield return new WaitForSeconds(1);
 
@@ -159,8 +159,15 @@ public class SpawnOnPlane : MonoBehaviour
             }
 
             // Wait two seconds then start again
-            yield return new WaitForSeconds(5);
-            StartCoroutine(SpawnTanksAR());
+            if (arPlanesTracking.Count > 0)
+            {
+                yield return new WaitForSeconds(4);
+                StartCoroutine(SpawnTanksAR());
+            } else
+            {
+                yield return new WaitForSeconds(0);
+                StartCoroutine(FindARPlanesAlert());
+            }
         } else
         {
             yield return new WaitForSeconds(0);
