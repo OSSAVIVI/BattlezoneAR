@@ -37,7 +37,8 @@ public class SpawnOnPlane : MonoBehaviour
     private void Start()
     {
         // Start spawning tanks on AR planes
-        StartCoroutine(SpawnTanksAR());
+        StartCoroutine(FindARPlanesAlert());
+        //StartCoroutine(SpawnTanksAR());
     }
 
     // Add and remove planes based on their tracking status
@@ -75,6 +76,29 @@ public class SpawnOnPlane : MonoBehaviour
                 arPlanesTracking.Add(arPlanesRemoved[j]);
                 arPlanesRemoved.Remove(arPlanesRemoved[j]);
             }
+        }
+    }
+
+    IEnumerator FindARPlanesAlert()
+    {
+        string alertMessage = "";
+
+        if (arPlanesTracking.Count > 0)
+        {
+            alertMessage = "";
+            AlertLog.write(alertMessage);
+            yield return new WaitForSeconds(0);
+            StartCoroutine(SpawnTanksAR());
+        } else
+        {
+            alertMessage = "LOOK AROUND SLOWLY";
+            AlertLog.write(alertMessage);
+            yield return new WaitForSeconds(1);
+
+            alertMessage = "";
+            AlertLog.write(alertMessage);
+            yield return new WaitForSeconds(1);
+            StartCoroutine(FindARPlanesAlert());
         }
     }
 
@@ -133,10 +157,14 @@ public class SpawnOnPlane : MonoBehaviour
                 targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
                 placedObject.transform.LookAt(targetVectorGround);
             }
-        }
 
-        // Wait two seconds then start again
-        yield return new WaitForSeconds(5);
-        StartCoroutine(SpawnTanksAR());
+            // Wait two seconds then start again
+            yield return new WaitForSeconds(5);
+            StartCoroutine(SpawnTanksAR());
+        } else
+        {
+            yield return new WaitForSeconds(0);
+            StartCoroutine(FindARPlanesAlert());
+        }
     }
 }
