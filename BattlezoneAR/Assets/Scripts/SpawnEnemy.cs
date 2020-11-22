@@ -11,16 +11,16 @@ public class SpawnEnemy : MonoBehaviour
     public GameObject[] enemyObject;
     public int spawnScore;
     public int waitTime;
-    bool enemySpanwed = false;
+    bool enemySpawned = false;
 
     // Start is called before the first frame update
 
     void Update()
     {
-        if (PlayerPrefs.GetInt("PlayerScore") >= spawnScore && !enemySpanwed)
+        if (PlayerPrefs.GetInt("PlayerScore") >= spawnScore && !enemySpawned)
         {
             StartCoroutine(PrimaryEnemySpawn());
-            enemySpanwed = true;
+            enemySpawned = true;
         }
     }
   //  IEnumerator PrimaryEnemySpawn()
@@ -38,7 +38,7 @@ public class SpawnEnemy : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            Instantiate(enemyObject[i], spawnPoints[i].position, Quaternion.identity);
+            Instantiate(enemyObject[0], spawnPoints[i].position, Quaternion.identity);
             yield return new WaitForSeconds(waitTime);
         }
 

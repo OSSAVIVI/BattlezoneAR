@@ -814,7 +814,8 @@ MonoBehaviour:
   - {fileID: 2102220274}
   - {fileID: 1554903209}
   - {fileID: 928327209}
-  enemyObject: []
+  enemyObject:
+  - {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4, type: 3}
   spawnScore: 0
   waitTime: 10
 --- !u!4 &778281359
@@ -974,8 +975,6 @@ MonoBehaviour:
   - {fileID: 378438887}
   enemyObject:
   - {fileID: 885200378114740093, guid: 835d977f2fb6d884f994435342fad6c5, type: 3}
-  - {fileID: 885200378114740093, guid: 835d977f2fb6d884f994435342fad6c5, type: 3}
-  - {fileID: 885200378114740093, guid: 835d977f2fb6d884f994435342fad6c5, type: 3}
   spawnScore: 2000
   waitTime: 30
 --- !u!1 &1515470948
@@ -1026,8 +1025,6 @@ MonoBehaviour:
   - {fileID: 2126060393}
   - {fileID: 787915129}
   enemyObject:
-  - {fileID: 1741256010450069908, guid: 4a2305055c0245a4cb9ce0d2f5b7bdb5, type: 3}
-  - {fileID: 1741256010450069908, guid: 4a2305055c0245a4cb9ce0d2f5b7bdb5, type: 3}
   - {fileID: 1741256010450069908, guid: 4a2305055c0245a4cb9ce0d2f5b7bdb5, type: 3}
   spawnScore: 10000
   waitTime: 10
