@@ -648,6 +648,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: 10 HP
       objectReference: {fileID: 0}
+    - target: {fileID: 2788633038222468862, guid: 420ff04ff7fb240be95d1b61c94506e7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 2940688748310368145, guid: 420ff04ff7fb240be95d1b61c94506e7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -998,8 +1003,8 @@ MonoBehaviour:
   - {fileID: 928327209}
   enemyObject:
   - {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4, type: 3}
-  spawnScore: 0
-  waitTime: 10
+  spawnScore: 1000000
+  waitTime: 100
 --- !u!4 &778281359
 Transform:
   m_ObjectHideFlags: 0

@@ -161,7 +161,7 @@ public class SpawnOnPlane : MonoBehaviour
             // Wait two seconds then start again
             if (arPlanesTracking.Count > 0)
             {
-                yield return new WaitForSeconds(4);
+                yield return new WaitForSeconds(10);
                 StartCoroutine(SpawnTanksAR());
             } else
             {

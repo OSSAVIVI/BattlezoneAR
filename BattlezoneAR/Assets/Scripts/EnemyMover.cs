@@ -17,6 +17,8 @@ public class EnemyMover : MonoBehaviour
     [SerializeField]
     private ARPlaneManager arPlaneManager;
 
+    private Camera camera;
+
     private void Awake()
     {
         arPlaneManager = GetComponent<ARPlaneManager>();
@@ -25,22 +27,23 @@ public class EnemyMover : MonoBehaviour
     void Start()
     {
         target = GameObject.FindWithTag("MainCamera");
+        camera = target.GetComponent<Camera>();
     }
 
-    public void Shoot()
-    {
-        Rigidbody shot = Instantiate(projectile[0], transform.position, transform.rotation);
-        shot.AddForce(transform.forward * 1000f);
-        SoundManagerScript.playShotSound();
-    }
+    //public void Shoot()
+    //{
+    //    Rigidbody shot = Instantiate(projectile[0], transform.position, transform.rotation);
+    //    shot.AddForce(transform.forward * 1000f);
+    //    SoundManagerScript.playShotSound();
+    //}
 
     // Update is called once per frame
     void Update()
     {
         target = GameObject.FindWithTag("MainCamera");
-
-        // This makes the enemy tank "look" at the player in regard to the x, z axis
         targetVectorARGround = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+
+        //// This makes the enemy tank "look" at the player in regard to the x, z axis
         Quaternion targetRotation = Quaternion.LookRotation(targetVectorARGround - transform.position);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
 
@@ -53,15 +56,56 @@ public class EnemyMover : MonoBehaviour
             transform.position += transform.forward * 0.1f * Time.deltaTime;
         }
 
-        // This tells us if the two objects are facing one another
-        Vector3 dirFromAtoB = (target.transform.position - transform.position).normalized;
-        float dotProd = Vector3.Dot(dirFromAtoB, transform.forward);
- 
-        if(dotProd > 0.95 && !shotFired){
-            shotFired = true;
-            Debug.Log("looking at");
-            // ObjA is looking mostly towards ObjB
-            //Shoot();
+        string enemyAlert = "";
+
+        // Determine where the target is in reference to the player
+        Vector3 enemyPos = Quaternion.Inverse(target.transform.rotation) * (transform.position - target.transform.position);
+        bool easilyViewable = false;
+
+        Vector3 screenPoint = camera.WorldToViewportPoint(transform.position);
+        if (screenPoint.z > 0 && screenPoint.x > 0.1 && screenPoint.x < 0.9 && screenPoint.y > 0.1 && screenPoint.y < 0.9)
+        {
+            easilyViewable = true;
         }
+        else
+        {
+            easilyViewable = false;
+        }
+
+        if (Vector3.Distance(targetVectorARGround, transform.position) < 2f)
+        {
+            enemyAlert += "ENEMY IN RANGE";
+        }
+
+        if (!easilyViewable)
+        {
+            if (enemyPos.z < 0)
+            {
+                enemyAlert += "\n\nENEMY TO REAR";
+            }
+            else if (enemyPos.x > 0)
+            {
+                enemyAlert += "\n\nENEMY TO RIGHT";
+            }
+            else if (enemyPos.x < 0)
+            {
+                enemyAlert += "\n\nENEMY TO LEFT";
+            }
+        }
+
+        AlertLog.write(enemyAlert);
+
+
+
+        //// This tells us if the two objects are facing one another
+        //Vector3 dirFromAtoB = (target.transform.position - transform.position).normalized;
+        //float dotProd = Vector3.Dot(dirFromAtoB, transform.forward);
+
+        //if(dotProd > 0.95 && !shotFired){
+        //    shotFired = true;
+        //    Debug.Log("looking at");
+        //    // ObjA is looking mostly towards ObjB
+        //    //Shoot();
+        //}
     }
 }
