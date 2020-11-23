@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using UnityEngine;
@@ -8,40 +9,53 @@ using UnityEngine;
 public class SpawnEnemy : MonoBehaviour
 {
     public Transform[] spawnPoints;
-    public GameObject[] enemyObject;
+    public GameObject enemyPrefab;
+    private GameObject spawnedObject;
     public int spawnScore;
     public int waitTime;
-    bool enemySpawned = false;
+    private bool routineStarted = false;
 
     // Start is called before the first frame update
-
     void Update()
     {
-        if (PlayerPrefs.GetInt("PlayerScore") >= spawnScore && !enemySpawned)
+        if (PlayerPrefs.GetInt("PlayerScore") >= spawnScore && routineStarted == false)
         {
-            StartCoroutine(PrimaryEnemySpawn());
-            enemySpawned = true;
+            // Spawn one the moment the spawn score is passed
+
+            //Random seed 
+            System.Random randomSeed = new System.Random();
+
+            // Get random UFO spawn location
+            int randomSpawnIndex = randomSeed.Next(0, spawnPoints.Count());
+            spawnedObject = Instantiate(enemyPrefab, spawnPoints[randomSpawnIndex].transform.position, Quaternion.identity);
+
+            // Start routine 
+            routineStarted = true;
+            StartCoroutine(UFOSpawn());
         }
     }
-  //  IEnumerator PrimaryEnemySpawn()
-   // {
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    Instantiate(enemyTank[i], spawnPoints[i].position, Quaternion.identity);
-        //    yield return new WaitForSeconds(10);
-        //}
 
-       // StartCoroutine(PrimaryEnemySpawn());
-   // }
-
-    IEnumerator PrimaryEnemySpawn()
+    IEnumerator UFOSpawn()
     {
-        for (int i = 0; i < 3; i++)
+        // If no UFO spawned 
+        if(spawnedObject == null)
         {
-            Instantiate(enemyObject[0], spawnPoints[i].position, Quaternion.identity);
+            // Buffer next spawn
             yield return new WaitForSeconds(waitTime);
+
+            //Random seed 
+            System.Random randomSeed = new System.Random();
+
+            // Get random UFO spawn location
+            int randomSpawnIndex = randomSeed.Next(0, spawnPoints.Count());
+            spawnedObject = Instantiate(enemyPrefab, spawnPoints[randomSpawnIndex].transform.position, Quaternion.identity);
+        } // Currently spawned UFO
+        else
+        {
+            // Wait a bit before checking again
+            yield return new WaitForSeconds(5);
         }
 
-        StartCoroutine(PrimaryEnemySpawn());
+        StartCoroutine(UFOSpawn());
     }
 }
