@@ -101,6 +101,12 @@ public class SpawnOnPlane : MonoBehaviour
     // Alert player while no planes are active
     IEnumerator FindARPlanesAlert()
     {
+        // Remove enemy if things become disoriented 
+        if(enemySpawnObject != null)
+        {
+            Destroy(enemySpawnObject);
+        }
+
         string alertMessage = "";
 
         if (arPlanesTracking.Count > 0)
