@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -23,6 +24,21 @@ public class SpawnOnPlane : MonoBehaviour
     private Vector3 targetVectorGround;
     private Vector3 spawnOnARPlane;
 
+    [SerializeField]
+    public Transform[] enemySpawnPoints;
+
+    [SerializeField]
+    public GameObject[] enemyPrefabs;
+
+    [SerializeField]
+    public int[] spawnScores;
+
+    private GameObject enemySpawnObject;
+
+    private int enemyTier = 0;
+
+    private Vector3 spawnPosition;
+
     private void Awake()
     {
         // Add function to event to track reliable AR planes
@@ -38,7 +54,7 @@ public class SpawnOnPlane : MonoBehaviour
     {
         // Start spawning tanks on AR planes
         StartCoroutine(FindARPlanesAlert());
-        //StartCoroutine(SpawnTanksAR());
+        //StartCoroutine(SpawnEnemiesAR());
     }
 
     // Add and remove planes based on their tracking status
@@ -88,87 +104,133 @@ public class SpawnOnPlane : MonoBehaviour
             alertMessage = "";
             AlertLog.write(alertMessage);
             yield return new WaitForSeconds(0);
-            StartCoroutine(SpawnTanksAR());
+            StartCoroutine(SpawnEnemiesAR());
         } else
         {
             alertMessage = "LOOK AROUND SLOWLY FOR TANK PORTALS";
             AlertLog.write(alertMessage);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
 
             alertMessage = "";
             AlertLog.write(alertMessage);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             StartCoroutine(FindARPlanesAlert());
         }
     }
 
     // Spawn tanks onto planes during the scene
-    IEnumerator SpawnTanksAR()
+    IEnumerator SpawnEnemiesAR()
     {
-        // If there are reliable AR planes and there is no tank
+        // If there are reliable AR planes
         if(arPlanesTracking.Count > 0)
         {
-            if (arPlanesTracking[0] != null > 0 && placedObject == null)
+            // If there is no current enemy spawn
+            if (enemySpawnObject == null)
             {
-                // Get a random AR plane
-                System.Random randomSeed = new System.Random();
-                int randomIndex = randomSeed.Next(0, arPlanesTracking.Count);
-                ARPlane arPlane = arPlanesTracking[randomIndex];
+                // Clear alert box
+                string alertMessage = "";
+                AlertLog.write(alertMessage);
 
-                // Find random valid spawn point above plane, if something
-                // weird happens spawn in middle of plane
-                int limit = 0;
-                do
+                // Buffer next spawn
+                yield return new WaitForSeconds(4);
+
+                // Determine current enemy tier
+                int currentScore = PlayerPrefs.GetInt("PlayerScore");
+                while(enemyTier < spawnScores.Count() - 1 && currentScore >= spawnScores[enemyTier + 1])
                 {
-                    if (limit == 5)
+                    enemyTier++;
+                }
+
+                // Random seed
+                System.Random randomSeed = new System.Random();
+
+                // Get random enemy from available tiers
+                int randomEnemyIndex = randomSeed.Next(0, enemyTier + 1);
+
+                // Get spawn position
+
+                // If AR plane spawn
+                if(randomEnemyIndex == 0 || randomEnemyIndex == 2)
+                {
+                    // If we lost our plane, start looking again
+                    if (!(arPlanesTracking.Count > 0))
                     {
-                        spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
-                    }
-                    else
-                    {
-                        // Random x, z offset from center of AR plane
-                        // May sometimes not be above actual plane
-                        // Limit attempts to find point above plane to 4
-                        Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
-                        Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
-
-                        double rangeX = (double)max.x - (double)min.x;
-                        double sampleX = randomSeed.NextDouble();
-                        double scaledX = (sampleX * rangeX) + min.x;
-                        float randX = (float)scaledX;
-
-                        double rangeZ = (double)max.z - (double)min.z;
-                        double sampleZ = randomSeed.NextDouble();
-                        double scaledZ = (sampleZ * rangeZ) + min.z;
-                        float randZ = (float)scaledZ;
-
-                        spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+                        yield return new WaitForSeconds(0.25f);
+                        StartCoroutine(FindARPlanesAlert());
                     }
 
-                    limit++;
+                    // Get a random AR plane
+                    int randomPlaneIndex = randomSeed.Next(0, arPlanesTracking.Count);
+                    ARPlane arPlane = arPlanesTracking[randomPlaneIndex];
 
-                } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 5));
+                    // Find random valid spawn point above plane, if something
+                    // weird happens spawn in middle of plane
+                    int limit = 0;
+                    do
+                    {
+                        if (limit == 5)
+                        {
+                            spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
+                        }
+                        else
+                        {
+                            // Random x, z offset from center of AR plane
+                            // May sometimes not be above actual plane
+                            // Limit attempts to find point above plane to 4
+                            Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
+                            Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
 
-                // Place tank at AR spawn point
-                placedObject = Instantiate(placedPrefab, spawnOnARPlane, Quaternion.identity);
+                            double rangeX = (double)max.x - (double)min.x;
+                            double sampleX = randomSeed.NextDouble();
+                            double scaledX = (sampleX * rangeX) + min.x;
+                            float randX = (float)scaledX;
 
-                // Rotate tank to face player 
-                target = GameObject.FindWithTag("MainCamera");
-                targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
-                placedObject.transform.LookAt(targetVectorGround);
+                            double rangeZ = (double)max.z - (double)min.z;
+                            double sampleZ = randomSeed.NextDouble();
+                            double scaledZ = (sampleZ * rangeZ) + min.z;
+                            float randZ = (float)scaledZ;
+
+                            spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+                            target = GameObject.FindWithTag("MainCamera");
+                            targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
+                        }
+
+                        limit++;
+
+                    } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 5));
+
+                    spawnPosition = spawnOnARPlane;
+                } // If non-AR plane spawn
+                else if (randomEnemyIndex == 1)
+                {
+                    // Get a random spawn location from given
+                    int randomSpawnIndex = randomSeed.Next(0, enemySpawnPoints.Count());
+                    Transform enemySpawnPoint = enemySpawnPoints[randomSpawnIndex];
+                    spawnPosition = new Vector3(enemySpawnPoint.position.x, enemySpawnPoint.position.y, enemySpawnPoint.position.z);
+                }
+
+                // Place enemy at spawn point
+                enemySpawnObject = Instantiate(enemyPrefabs[randomEnemyIndex], spawnPosition, Quaternion.identity);
+
+                // If AR spawn, rotate to face player
+                if (randomEnemyIndex == 0 || randomEnemyIndex == 2)
+                {
+                    enemySpawnObject.transform.LookAt(targetVectorGround);
+                }
             }
 
             // Wait two seconds then start again
             if (arPlanesTracking.Count > 0)
             {
-                yield return new WaitForSeconds(10);
-                StartCoroutine(SpawnTanksAR());
+                yield return new WaitForSeconds(0.5f);
+                StartCoroutine(SpawnEnemiesAR());
             } else
             {
                 yield return new WaitForSeconds(0);
                 StartCoroutine(FindARPlanesAlert());
             }
-        } else
+        } // If there are no reliable AR planes
+        else
         {
             yield return new WaitForSeconds(0);
             StartCoroutine(FindARPlanesAlert());
