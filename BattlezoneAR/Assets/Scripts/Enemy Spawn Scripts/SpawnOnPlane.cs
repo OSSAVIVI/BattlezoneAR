@@ -158,7 +158,6 @@ public class SpawnOnPlane : MonoBehaviour
                 int randomEnemyIndex = randomSeed.Next(0, enemyTier + 1);
 
                 // Get spawn position
-
                 // If AR plane spawn
                 if((randomEnemyIndex == 0 || randomEnemyIndex == 2) && spawnOnARPlanes)
                 {
@@ -226,6 +225,23 @@ public class SpawnOnPlane : MonoBehaviour
                 if (randomEnemyIndex == 0 || randomEnemyIndex == 2)
                 {
                     enemySpawnObject.transform.LookAt(targetVectorGround);
+                } 
+                else if (randomEnemyIndex == 1)
+                {
+                    // Let the missile go for 8 seconds
+                    int missileTimer = 8;
+                    while (enemySpawnObject != null && missileTimer > 0)
+                    {
+                        yield return new WaitForSeconds(1f);
+                        missileTimer--;
+                    }
+
+                    // If the missile was not destoryed after given time,
+                    // destory the missile
+                    if(enemySpawnObject != null)
+                    {
+                        Destroy(enemySpawnObject);
+                    }
                 }
             }
 
