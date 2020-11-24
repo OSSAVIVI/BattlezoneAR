@@ -14,10 +14,10 @@ public class UFOMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.RotateAround(transform.position, transform.up, Time.deltaTime * 90f);
-        if (Vector3.Distance(transform.position, target.transform.position) > 5f)
-        {
-            transform.position += transform.forward * 1f * Time.deltaTime;
-        }
+        transform.RotateAround(transform.position, transform.up, Time.deltaTime * 60f);
+        //if (Vector3.Distance(transform.position, target.transform.position) > 3f)
+        //{
+            transform.position += transform.forward * 0.25f * Time.deltaTime;
+        //}
     }
 }

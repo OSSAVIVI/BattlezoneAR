@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
-        health = 10;
+        health = 3;
         healthDisplay.GetComponent<Text>().text = health.ToString() + " HP";
         hitRate = 0.5f;
         nextHit = -1f;

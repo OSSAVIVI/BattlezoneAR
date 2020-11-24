@@ -45,7 +45,7 @@ public class EnemyMover : MonoBehaviour
 
         //// This makes the enemy tank "look" at the player in regard to the x, z axis
         Quaternion targetRotation = Quaternion.LookRotation(targetVectorARGround - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 1 * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.25f * Time.deltaTime);
 
         // This makes the enemy tanks move toward the player
         if (Vector3.Distance(targetVectorARGround, transform.position) > 0.5f && (Physics.Raycast(transform.position, Vector3.down, 0.1f)))

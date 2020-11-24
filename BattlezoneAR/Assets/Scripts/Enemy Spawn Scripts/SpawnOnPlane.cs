@@ -22,7 +22,7 @@ public class SpawnOnPlane : MonoBehaviour
 
     private GameObject target;
     private Vector3 targetVectorGround;
-    private Vector3 spawnOnARPlane;
+    private Vector3 spawnARPosition;
 
     [SerializeField]
     public Transform[] enemySpawnPoints;
@@ -39,6 +39,8 @@ public class SpawnOnPlane : MonoBehaviour
 
     private Vector3 spawnPosition;
 
+    private bool spawnOnARPlanes;
+
     private void Awake()
     {
         // Add function to event to track reliable AR planes
@@ -52,6 +54,7 @@ public class SpawnOnPlane : MonoBehaviour
 
     private void Start()
     {
+        spawnOnARPlanes = true;
         // Start spawning tanks on AR planes
         StartCoroutine(FindARPlanesAlert());
         //StartCoroutine(SpawnEnemiesAR());
@@ -95,8 +98,15 @@ public class SpawnOnPlane : MonoBehaviour
         }
     }
 
+    // Alert player while no planes are active
     IEnumerator FindARPlanesAlert()
     {
+        // Remove enemy if things become disoriented 
+        if(enemySpawnObject != null)
+        {
+            Destroy(enemySpawnObject);
+        }
+
         string alertMessage = "";
 
         if (arPlanesTracking.Count > 0)
@@ -148,9 +158,8 @@ public class SpawnOnPlane : MonoBehaviour
                 int randomEnemyIndex = randomSeed.Next(0, enemyTier + 1);
 
                 // Get spawn position
-
                 // If AR plane spawn
-                if(randomEnemyIndex == 0 || randomEnemyIndex == 2)
+                if((randomEnemyIndex == 0 || randomEnemyIndex == 2) && spawnOnARPlanes)
                 {
                     // If we lost our plane, start looking again
                     if (!(arPlanesTracking.Count > 0))
@@ -170,7 +179,7 @@ public class SpawnOnPlane : MonoBehaviour
                     {
                         if (limit == 5)
                         {
-                            spawnOnARPlane = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
+                            spawnARPosition = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
                         }
                         else
                         {
@@ -190,20 +199,20 @@ public class SpawnOnPlane : MonoBehaviour
                             double scaledZ = (sampleZ * rangeZ) + min.z;
                             float randZ = (float)scaledZ;
 
-                            spawnOnARPlane = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
+                            spawnARPosition = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
                             target = GameObject.FindWithTag("MainCamera");
                             targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
                         }
 
                         limit++;
 
-                    } while (!(Physics.Raycast(spawnOnARPlane, Vector3.down, 0.1f)) && (limit < 5));
+                    } while (!(Physics.Raycast(spawnARPosition, Vector3.down, 0.1f)) && (limit < 5));
 
-                    spawnPosition = spawnOnARPlane;
+                    spawnPosition = spawnARPosition;
                 } // If non-AR plane spawn
-                else if (randomEnemyIndex == 1)
+                else if (randomEnemyIndex == 1 || !spawnOnARPlanes)
                 {
-                    // Get a random spawn location from given
+                    // Get a random spawn location from given positions
                     int randomSpawnIndex = randomSeed.Next(0, enemySpawnPoints.Count());
                     Transform enemySpawnPoint = enemySpawnPoints[randomSpawnIndex];
                     spawnPosition = new Vector3(enemySpawnPoint.position.x, enemySpawnPoint.position.y, enemySpawnPoint.position.z);
@@ -213,13 +222,37 @@ public class SpawnOnPlane : MonoBehaviour
                 enemySpawnObject = Instantiate(enemyPrefabs[randomEnemyIndex], spawnPosition, Quaternion.identity);
 
                 // If AR spawn, rotate to face player
-                if (randomEnemyIndex == 0 || randomEnemyIndex == 2)
+                if (randomEnemyIndex == 0)
                 {
+                    // Spawn with random direction
+                    enemySpawnObject.transform.rotation = Quaternion.Euler(0, randomSeed.Next(0, 360), 0);
+                    
+                } 
+                else if (randomEnemyIndex == 1)
+                {
+                    // Let the missile go for 8 seconds
+                    int missileTimer = 8;
+                    while (enemySpawnObject != null && missileTimer > 0)
+                    {
+                        yield return new WaitForSeconds(1f);
+                        missileTimer--;
+                    }
+
+                    // If the missile was not destoryed after given time,
+                    // destory the missile
+                    if(enemySpawnObject != null)
+                    {
+                        Destroy(enemySpawnObject);
+                    }
+                }
+                else if (randomEnemyIndex == 2)
+                {
+                    // Spawn facing player
                     enemySpawnObject.transform.LookAt(targetVectorGround);
                 }
             }
 
-            // Wait two seconds then start again
+            // Wait some time then start again
             if (arPlanesTracking.Count > 0)
             {
                 yield return new WaitForSeconds(0.5f);
