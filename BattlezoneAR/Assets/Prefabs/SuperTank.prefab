@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b1e57b8c3dd44c4a9c20c164be7015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1
+  health: 2
   score: 3000
 --- !u!114 &8227893970216132682
 MonoBehaviour:
@@ -171,6 +171,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc87dcbdd5a42cd930cf57fe9d9612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootRateMin: 2
+  shootRateMax: 5
+  shootForce: 1618
   projectile:
   - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}
   shotSpawn: {fileID: 1592283939724140730}

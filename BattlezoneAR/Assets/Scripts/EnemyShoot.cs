@@ -5,16 +5,17 @@ using UnityEngine;
 public class EnemyShoot : MonoBehaviour
 {
     private float shootRate;
+    public float shootRateMin;
+    public float shootRateMax;
     private float nextShoot;
-    private float shootForce;
+    public float shootForce;
     public Rigidbody[] projectile;
     public Transform shotSpawn;
 
     private void Start()
     {
-        shootRate = Random.Range(4, 8); //Enemies can have shoot rate between 5 and 10 shots pers second
+        shootRate = Random.Range(shootRateMin, shootRateMax);
         nextShoot = Time.time + shootRate;
-        shootForce = 1000f;
     }
 
     public void FixedUpdate()
