@@ -222,9 +222,11 @@ public class SpawnOnPlane : MonoBehaviour
                 enemySpawnObject = Instantiate(enemyPrefabs[randomEnemyIndex], spawnPosition, Quaternion.identity);
 
                 // If AR spawn, rotate to face player
-                if (randomEnemyIndex == 0 || randomEnemyIndex == 2)
+                if (randomEnemyIndex == 0)
                 {
-                    enemySpawnObject.transform.LookAt(targetVectorGround);
+                    // Spawn with random direction
+                    enemySpawnObject.transform.rotation = Quaternion.Euler(0, randomSeed.Next(0, 360), 0);
+                    
                 } 
                 else if (randomEnemyIndex == 1)
                 {
@@ -242,6 +244,11 @@ public class SpawnOnPlane : MonoBehaviour
                     {
                         Destroy(enemySpawnObject);
                     }
+                }
+                else if (randomEnemyIndex == 2)
+                {
+                    // Spawn facing player
+                    enemySpawnObject.transform.LookAt(targetVectorGround);
                 }
             }
 
