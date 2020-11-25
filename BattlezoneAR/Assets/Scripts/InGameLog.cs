@@ -7,7 +7,7 @@ public class InGameLog : MonoBehaviour
 {
     static Text textUI;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         textUI = GetComponent<Text>();
     }
