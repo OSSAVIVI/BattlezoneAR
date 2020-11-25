@@ -248,7 +248,9 @@ public class SpawnOnPlane : MonoBehaviour
                 else if (randomEnemyIndex == 2)
                 {
                     // Spawn facing player
-                    enemySpawnObject.transform.LookAt(targetVectorGround);
+                    //enemySpawnObject.transform.LookAt(targetVectorGround);
+                    // Spawn with random direction
+                    enemySpawnObject.transform.rotation = Quaternion.Euler(0, randomSeed.Next(0, 360), 0);
                 }
             }
 

@@ -296,6 +296,8 @@ MonoBehaviour:
   projectile:
   - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
+  turnSpeed: 0.25
+  moveSpeed: 0.1
 --- !u!65 &1264346824293381517
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -325,6 +327,8 @@ MonoBehaviour:
   projectile:
   - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
+  turnSpeed: 0
+  moveSpeed: 0
 --- !u!114 &8969516972284831841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,7 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootRateMin: 4
   shootRateMax: 8
-  shootForce: 1000
+  shootForce: 500
   projectile:
   - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}
   shotSpawn: {fileID: 1592283939724140730}

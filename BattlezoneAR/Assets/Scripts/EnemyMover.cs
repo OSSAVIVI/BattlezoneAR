@@ -19,6 +19,9 @@ public class EnemyMover : MonoBehaviour
 
     private Camera camera;
 
+    public float turnSpeed;
+    public float moveSpeed;
+
     private void Awake()
     {
         arPlaneManager = GetComponent<ARPlaneManager>();
@@ -45,7 +48,7 @@ public class EnemyMover : MonoBehaviour
 
         //// This makes the enemy tank "look" at the player in regard to the x, z axis
         Quaternion targetRotation = Quaternion.LookRotation(targetVectorARGround - transform.position);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.25f * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
 
         // This makes the enemy tanks move toward the player
         if (Vector3.Distance(targetVectorARGround, transform.position) > 0.5f && (Physics.Raycast(transform.position, Vector3.down, 0.1f)))
@@ -53,7 +56,7 @@ public class EnemyMover : MonoBehaviour
             // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
             // Can't just look up, because it hits itself
             // Need to check what it is hitting slightly both up and down and confirm that it is an AR plane, not itself
-            transform.position += transform.forward * 0.1f * Time.deltaTime;
+            transform.position += transform.forward * moveSpeed * Time.deltaTime;
         }
 
         string enemyAlert = "";

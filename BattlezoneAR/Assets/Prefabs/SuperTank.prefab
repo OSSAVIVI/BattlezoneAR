@@ -130,8 +130,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   projectile:
-  - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}
+  - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
+  turnSpeed: 0.4
+  moveSpeed: 0.15
 --- !u!65 &1264346824293381517
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b1e57b8c3dd44c4a9c20c164be7015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 2
+  health: 1
   score: 3000
 --- !u!114 &8227893970216132682
 MonoBehaviour:
@@ -173,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootRateMin: 2
   shootRateMax: 5
-  shootForce: 1618
+  shootForce: 500
   projectile:
   - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}
   shotSpawn: {fileID: 1592283939724140730}
@@ -342,7 +344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5468208739512018356
 Transform:
   m_ObjectHideFlags: 0

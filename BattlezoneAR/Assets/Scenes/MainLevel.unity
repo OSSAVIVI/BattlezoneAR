@@ -789,7 +789,7 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4, type: 3}
   - {fileID: 1741256010450069908, guid: 4a2305055c0245a4cb9ce0d2f5b7bdb5, type: 3}
-  - {fileID: 797680132196939006, guid: f617f75f504bcd14b976f1577bf10ff4, type: 3}
+  - {fileID: 797680132196939006, guid: c7653726008534a63842041290a0e773, type: 3}
   spawnScores: 0000000010270000b8880000
 --- !u!1 &378438886
 GameObject:
