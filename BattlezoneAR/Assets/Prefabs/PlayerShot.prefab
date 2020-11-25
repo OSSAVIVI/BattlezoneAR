@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6244674530424216243}
   - component: {fileID: 4150094392935047468}
   - component: {fileID: 5961552049041154090}
+  - component: {fileID: 4592670906501817100}
   m_Layer: 0
   m_Name: PlayerShot
   m_TagString: PlayerShot
@@ -138,3 +139,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b77e5d5c0a214c14ab87f6b2723646ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!122 &4592670906501817100
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614006598594216615}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4282580818
+  m_Size: 0.007

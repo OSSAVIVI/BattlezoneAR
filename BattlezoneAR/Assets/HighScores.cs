@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class HighScores : MonoBehaviour
 {
     public GameObject title;
-    private static readonly int numberOfHighScores = 8;
+    public static readonly int numberOfHighScores = 8;
     public GameObject[] names;
     public GameObject[] scores;
     private int initialNumber;
