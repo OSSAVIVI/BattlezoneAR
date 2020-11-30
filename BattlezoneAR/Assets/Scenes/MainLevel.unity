@@ -1102,6 +1102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1515470949}
   - component: {fileID: 1515470950}
+  - component: {fileID: 1515470951}
   m_Layer: 0
   m_Name: SpawnScript
   m_TagString: Untagged
@@ -1130,7 +1131,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1515470948}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c3173026598e93419b748fef9b294eb, type: 3}
   m_Name: 
@@ -1139,6 +1140,22 @@ MonoBehaviour:
   - {fileID: 110038469}
   - {fileID: 1905627452}
   - {fileID: 378438887}
+  enemyPrefab: {fileID: 885200378114740093, guid: 835d977f2fb6d884f994435342fad6c5,
+    type: 3}
+  spawnScore: 2000
+  waitTime: 30
+--- !u!114 &1515470951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515470948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8652ab4eeba920a4aa74e47179c512ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 885200378114740093, guid: 835d977f2fb6d884f994435342fad6c5,
     type: 3}
   spawnScore: 2000
