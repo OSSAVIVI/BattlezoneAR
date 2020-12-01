@@ -91,7 +91,6 @@ public class SpawnOnPlane : MonoBehaviour
         {
             if (arPlanesRemoved[j].trackingState.ToString() == "Tracking")
             {
-
                 arPlanesRemoved[j].gameObject.SetActive(true);
                 arPlanesTracking.Add(arPlanesRemoved[j]);
                 arPlanesRemoved.Remove(arPlanesRemoved[j]);
@@ -143,7 +142,7 @@ public class SpawnOnPlane : MonoBehaviour
                 AlertLog.write(alertMessage);
 
                 // Buffer next spawn
-                yield return new WaitForSeconds(4);
+                yield return new WaitForSeconds(3);
 
                 // Determine current enemy tier
                 int currentScore = PlayerPrefs.GetInt("PlayerScore");
@@ -198,6 +197,25 @@ public class SpawnOnPlane : MonoBehaviour
                         spawnARPosition = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
                         target = GameObject.FindWithTag("MainCamera");
                         targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
+                    }
+
+                    // If below a different plane, lift tank up
+                    Vector3 spawnSkyPosition = new Vector3(spawnARPosition.x, spawnARPosition.y + 100.0f, spawnARPosition.z);
+                    RaycastHit[] allSkyHits = Physics.RaycastAll(spawnSkyPosition, Vector3.down);
+                    Vector3 highestARPlanePos = new Vector3(spawnARPosition.x, -999.9f, spawnARPosition.z);
+
+                    foreach (var hit in allSkyHits)
+                    {
+                        if (hit.collider.name.Substring(0, 7) == "ARPlane" && highestARPlanePos.y < hit.point.y)
+                        {
+                            highestARPlanePos = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+                        }
+                    }
+
+                    if (spawnARPosition.y < highestARPlanePos.y)
+                    {
+                        spawnARPosition.y = highestARPlanePos.y + 0.05f;
+                        InGameLog.writeToLog("SPAWNED ABOVE");
                     }
 
                     spawnPosition = spawnARPosition;
@@ -258,7 +276,6 @@ public class SpawnOnPlane : MonoBehaviour
                 {
                     // Spawn with random direction
                     enemySpawnObject.transform.rotation = Quaternion.Euler(0, randomSeed.Next(0, 360), 0);
-                    
                 } 
                 else if (randomEnemyIndex == 1)
                 {
@@ -281,6 +298,7 @@ public class SpawnOnPlane : MonoBehaviour
                 {
                     // Spawn facing player
                     //enemySpawnObject.transform.LookAt(targetVectorGround);
+
                     // Spawn with random direction
                     enemySpawnObject.transform.rotation = Quaternion.Euler(0, randomSeed.Next(0, 360), 0);
                 }

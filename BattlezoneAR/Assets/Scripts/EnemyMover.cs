@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -22,6 +24,12 @@ public class EnemyMover : MonoBehaviour
     public float turnSpeed;
     public float moveSpeed;
 
+    private Collider2D enemyCollider;
+    private int numColliders;
+    private Collider2D[] collisionResults;
+    public ContactFilter2D contactFilter;
+
+
     private void Awake()
     {
         arPlaneManager = GetComponent<ARPlaneManager>();
@@ -31,6 +39,12 @@ public class EnemyMover : MonoBehaviour
     {
         target = GameObject.FindWithTag("MainCamera");
         camera = target.GetComponent<Camera>();
+
+        enemyCollider = gameObject.GetComponent<Collider2D>();
+
+        numColliders = 16;
+        collisionResults = new Collider2D[numColliders];
+        contactFilter = new ContactFilter2D().NoFilter();
     }
 
     //public void Shoot()
@@ -43,6 +57,27 @@ public class EnemyMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Check if there is a plane above the enemy
+        Vector3 enemySkyPosition = new Vector3(transform.position.x, transform.position.y + 100.0f, transform.position.z);
+        RaycastHit[] allSkyHits = Physics.RaycastAll(enemySkyPosition, Vector3.down);
+        Vector3 highestARPlanePos = new Vector3(transform.position.x, -999.9f, transform.position.z);
+
+        foreach (var hit in allSkyHits)
+        {
+            if(hit.collider.name.Substring(0,7) == "ARPlane" && highestARPlanePos.y < hit.point.y)
+            {
+                highestARPlanePos = new Vector3(transform.position.x, hit.point.y, transform.position.z); 
+            }
+        }
+
+        if(transform.position.y < highestARPlanePos.y)
+        {
+            Vector3 climbTo = new Vector3(highestARPlanePos.x, highestARPlanePos.y + 0.05f, highestARPlanePos.z);
+            Quaternion climbRotation = Quaternion.LookRotation(climbTo - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, climbRotation, turnSpeed * Time.deltaTime);
+            transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        }
+
         target = GameObject.FindWithTag("MainCamera");
         targetVectorARGround = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
 
