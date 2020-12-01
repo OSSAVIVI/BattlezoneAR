@@ -132,8 +132,22 @@ MonoBehaviour:
   projectile:
   - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
-  turnSpeed: 0.4
-  moveSpeed: 0.15
+  turnSpeed: 30
+  moveSpeed: 0.2
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
 --- !u!65 &1264346824293381517
 BoxCollider:
   m_ObjectHideFlags: 0
