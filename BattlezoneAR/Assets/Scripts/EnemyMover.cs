@@ -119,7 +119,6 @@ public class EnemyMover : MonoBehaviour
                 }
             } else
             {
-                message += "\nTRANSPORTED";
                 transform.position = new Vector3(highestARPlanePos.x, highestARPlanePos.y + 0.05f, highestARPlanePos.z);
             }
             
@@ -128,8 +127,6 @@ public class EnemyMover : MonoBehaviour
         // Check to make sure enemy is flat again
         else
         {
-            message += "\n NO PLANE ABOVE";
-
             // Level enemy if not leveled from climbing
             float angle = 0.1f;
             if (facingClimbHeight == true && transform.rotation != originalRotation)
