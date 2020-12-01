@@ -355,8 +355,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc87dcbdd5a42cd930cf57fe9d9612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootRateMin: 4
-  shootRateMax: 8
+  shootRateMin: 3
+  shootRateMax: 5
   shootForce: 500
   projectile:
   - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}
