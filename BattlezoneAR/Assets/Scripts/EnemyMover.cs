@@ -56,18 +56,9 @@ public class EnemyMover : MonoBehaviour
         contactFilter = new ContactFilter2D().NoFilter();
     }
 
-    //public void Shoot()
-    //{
-    //    Rigidbody shot = Instantiate(projectile[0], transform.position, transform.rotation);
-    //    shot.AddForce(transform.forward * 1000f);
-    //    SoundManagerScript.playShotSound();
-    //}
-
     // Update is called once per frame
     void Update()
     {
-        string message = "";
-        message += "TANK: " + transform.position.ToString();
         // Check if there is a plane above the enemy
         Vector3 enemySkyPosition = new Vector3(transform.position.x, transform.position.y + 100.0f, transform.position.z);
         RaycastHit[] allSkyHits = Physics.RaycastAll(enemySkyPosition, Vector3.down);
@@ -87,20 +78,12 @@ public class EnemyMover : MonoBehaviour
                     hit.collider.transform.position.z
                 );
                 highestARPlaneCenterGround = new Vector3(highestARPlaneCenter.x, transform.position.y, highestARPlaneCenter.z);
-                //message += "\n" + hit.collider.gameObject.lastUpdatedFrame;
-                //message += "\n" + hit.collider.gameObject.GetComponent<ARPlane>().center.ToString();
             }
         }
-
-        message += "\nPLANE:" + highestARPlanePos.ToString() 
-            + "\nCENTER:" + highestARPlaneCenter.ToString()
-            +"\nCENTER GROUND:" + highestARPlaneCenterGround.ToString();
 
         // There is a plane above the enemy
         if (allSkyHits.Count() > 0 && transform.position.y < highestARPlanePos.y)
         {
-            message += "\nPLANE ABOVE";
-            message += "\n" + (highestARPlanePos.y - transform.position.y).ToString();
             if ((highestARPlanePos.y - transform.position.y) > .1 || facingClimbHeight == true)
             {
 
@@ -120,10 +103,6 @@ public class EnemyMover : MonoBehaviour
                         facingClimbCenter = true;
                     }
 
-                    message += "\nFACING";
-                    // Rotate up towards plane
-                    //Vector3 dirFromAtoB = (highestARPlaneCenter - transform.position).normalized;
-                    //float dotProd = Vector3.Dot(dirFromAtoB, transform.forward);
                     if (Vector3.Angle(transform.forward, highestARPlaneCenter - transform.position) > angle
                         && facingClimbHeight == false)
                     {
@@ -143,16 +122,6 @@ public class EnemyMover : MonoBehaviour
                 message += "\nTRANSPORTED";
                 transform.position = new Vector3(highestARPlanePos.x, highestARPlanePos.y + 0.05f, highestARPlanePos.z);
             }
-            // Rotate towards center of plane if not facing
-            //Vector3 highestARPlaneCenterGround = new Vector3(highestARPlaneCenter.x, transform.position.y, highestARPlaneCenter.z);
-            //Vector3 dirFromAtoB = (highARPlaneCenterGround - transform.position).normalized;
-            //float dotProd = Vector3.Dot(dirFromAtoB, transform.forward);
-            //if (dotProd > 0.95)
-            //{
-            print(Vector3.Angle(transform.forward, highestARPlaneCenterGround - transform.position));
-
-
-
             
         }
         // Climbed above plane or was already above
@@ -165,14 +134,7 @@ public class EnemyMover : MonoBehaviour
             float angle = 0.1f;
             if (facingClimbHeight == true && transform.rotation != originalRotation)
             {
-                //Vector3 fallTo = new Vector3(highestARPlaneCenterGround.x, highestARPlaneCenterGround.y + 0.05f, highestARPlaneCenterGround.z);
-                //Quaternion fallRotation = Quaternion.LookRotation(fallTo - transform.position);
-
-                //transform.rotation = Quaternion.RotateTowards(transform.rotation, fallRotation, turnSpeed * Time.deltaTime);
-                message += "\nFALLING";
-                //transform.Rotate(45.0f, 0.0f, 0.0f);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, originalRotation, turnSpeed * 1.2f * Time.deltaTime);
-                //transform.position += transform.forward * moveSpeed * Time.deltaTime;
             } else
             {
                 facingClimbHeight = false;
@@ -181,7 +143,7 @@ public class EnemyMover : MonoBehaviour
                 target = GameObject.FindWithTag("MainCamera");
                 targetVectorARGround = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
 
-                //// This makes the enemy tank "look" at the player in regard to the x, z axis
+                // This makes the enemy tank "look" at the player in regard to the x, z axis
                 float turnAngle = 10;
                 float stopAngle = 1;
                 if (Vector3.Angle(transform.forward, targetVectorARGround - transform.position) > turnAngle)
@@ -193,20 +155,14 @@ public class EnemyMover : MonoBehaviour
                 {
                     turning = false;
                 }
-                message = "COUNT: " + allSkyHits.Count().ToString() + "\n" + message;
-                message = "DISTANCE: " + Vector3.Distance(targetVectorARGround, transform.position).ToString() + "\n" + message;
-                message = "RAYCAST: " + (Physics.Raycast(transform.position, Vector3.down, 0.1f)).ToString() + "\n" + message;
 
                 if (turning == true)
                 {
-
-                    message = "TURNING\n" + message;
                     Quaternion targetRotation = Quaternion.LookRotation(targetVectorARGround - transform.position);
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
                 }
                 else if (Vector3.Distance(targetVectorARGround, transform.position) > 0.5f && (Physics.Raycast(transform.position, Vector3.down, 0.1f)))
                 {
-                    message = "MOVING\n" + message;
                     // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
                     // Can't just look up, because it hits itself
                     // Need to check what it is hitting slightly both up and down and confirm that it is an AR plane, not itself
@@ -214,20 +170,7 @@ public class EnemyMover : MonoBehaviour
                 }
 
             }
-
-            //// This makes the enemy tanks move toward the player
-            //if (Vector3.Distance(targetVectorARGround, transform.position) > 0.5f && (Physics.Raycast(transform.position, Vector3.down, 0.1f)))
-            //{
-            //    // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
-            //    // Can't just look up, because it hits itself
-            //    // Need to check what it is hitting slightly both up and down and confirm that it is an AR plane, not itself
-            //    transform.position += transform.forward * moveSpeed * Time.deltaTime;
-            //}
         }
-
-        InGameLog.writeToLog(message);
-
-
 
         string enemyAlert = "";
 
