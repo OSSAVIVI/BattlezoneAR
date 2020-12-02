@@ -133,7 +133,7 @@ MonoBehaviour:
   - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
   turnSpeed: 90
-  moveSpeed: 0.375
+  moveSpeed: 0.325
 --- !u!65 &1264346824293381517
 BoxCollider:
   m_ObjectHideFlags: 0

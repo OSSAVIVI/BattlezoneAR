@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  moveSpeed: 2.2
+  moveSpeed: 2.25
   turnRangeMin: -25
   turnRangeMax: 25
   turnIntervalMin: 0.7
@@ -235,8 +235,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 10.4}
-  m_Center: {x: 0, y: 3.2, z: 0}
+  m_Size: {x: 0.9, y: 0.9, z: 13}
+  m_Center: {x: 0, y: 3.2, z: 0.94}
 --- !u!54 &1658637725
 Rigidbody:
   m_ObjectHideFlags: 0
