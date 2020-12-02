@@ -19,6 +19,8 @@ public class MissileMover : MonoBehaviour
     public float turnIntervalMax;
     private float nextTurnTime;
 
+    private int playerScore;
+
     void Start()
     {
         target = GameObject.Find("Target");
@@ -28,12 +30,18 @@ public class MissileMover : MonoBehaviour
         randomTurns = true;
         directTarget = false;
         stopRotation = false;
+
+        playerScore = PlayerPrefs.GetInt("PlayerScore");
+        if (playerScore > 100000)
+        {
+            moveSpeed = moveSpeed * 1.4f;
+        }
     }
 
     void FixedUpdate()
     {
 
-        if (Vector3.Distance(transform.position, target.transform.position) < 2.5f)
+        if (Vector3.Distance(transform.position, target.transform.position) < 1.8f)
         {
             randomTurns = false;
             directTarget = true;
@@ -55,7 +63,7 @@ public class MissileMover : MonoBehaviour
             if (randomTurns)
             {
                 
-                if(Vector3.Distance(transform.position, target.transform.position) > 8f)
+                if(Vector3.Distance(transform.position, target.transform.position) > 7f)
                 {
                     transform.LookAt(target.transform);
                 } else if (Time.time > nextTurnTime)
@@ -108,13 +116,17 @@ public class MissileMover : MonoBehaviour
             {
                 enemyAlert += "\n\nENEMY TO REAR";
             }
-            else if (enemyPos.x > 0)
+            else if (enemyPos.x > 0.5f)
             {
                 enemyAlert += "\n\nENEMY TO RIGHT";
             }
-            else if (enemyPos.x < 0)
+            else if (enemyPos.x < -0.5f)
             {
                 enemyAlert += "\n\nENEMY TO LEFT";
+            }
+            else if (enemyPos.y < 0)
+            {
+                enemyAlert += "\n\nENEMY BELOW";
             }
         }
 

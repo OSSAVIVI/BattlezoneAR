@@ -215,50 +215,11 @@ public class SpawnOnPlane : MonoBehaviour
                     if (spawnARPosition.y < highestARPlanePos.y)
                     {
                         spawnARPosition.y = highestARPlanePos.y + 0.05f;
-                        InGameLog.writeToLog("SPAWNED ABOVE");
+                        //InGameLog.writeToLog("SPAWNED ABOVE");
                     }
 
                     spawnPosition = spawnARPosition;
 
-                    //// Find random valid spawn point above plane, if something
-                    //// weird happens spawn in middle of plane
-                    //int limit = 0;
-                    //do
-                    //{
-                    //    if (limit == 5)
-                    //    {
-                    //        spawnARPosition = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
-                    //        target = GameObject.FindWithTag("MainCamera");
-                    //        targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
-                    //    }
-                    //    else
-                    //    {
-                    //        // Random x, z offset from center of AR plane
-                    //        // May sometimes not be above actual plane
-                    //        // Limit attempts to find point above plane to 4
-                    //        Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
-                    //        Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
-
-                    //        double rangeX = (double)max.x - (double)min.x;
-                    //        double sampleX = randomSeed.NextDouble();
-                    //        double scaledX = (sampleX * rangeX) + min.x;
-                    //        float randX = (float)scaledX;
-
-                    //        double rangeZ = (double)max.z - (double)min.z;
-                    //        double sampleZ = randomSeed.NextDouble();
-                    //        double scaledZ = (sampleZ * rangeZ) + min.z;
-                    //        float randZ = (float)scaledZ;
-
-                    //        spawnARPosition = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
-                    //        target = GameObject.FindWithTag("MainCamera");
-                    //        targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
-                    //    }
-
-                    //    limit++;
-
-                    //} while (!(Physics.Raycast(spawnARPosition, Vector3.down, 0.1f)) && (limit < 5));
-
-                    //spawnPosition = spawnARPosition;
                 } // If non-AR plane spawn
                 else if (randomEnemyIndex == 1 || !spawnOnARPlanes)
                 {
@@ -297,10 +258,7 @@ public class SpawnOnPlane : MonoBehaviour
                 else if (randomEnemyIndex == 2)
                 {
                     // Spawn facing player
-                    //enemySpawnObject.transform.LookAt(targetVectorGround);
-
-                    // Spawn with random direction
-                    enemySpawnObject.transform.rotation = Quaternion.Euler(0, randomSeed.Next(0, 360), 0);
+                    enemySpawnObject.transform.LookAt(targetVectorGround);
                 }
             }
 

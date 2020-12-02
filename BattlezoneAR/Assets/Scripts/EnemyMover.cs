@@ -27,17 +27,13 @@ public class EnemyMover : MonoBehaviour
     public float turnSpeed;
     public float moveSpeed;
 
-    private Collider2D enemyCollider;
-    private int numColliders;
-    private Collider2D[] collisionResults;
-    public ContactFilter2D contactFilter;
-
     private bool facingClimbCenter = false;
     private bool facingClimbHeight = false;
     private bool turning = false;
 
     private Quaternion originalRotation;
 
+    private int playerScore;
 
     private void Awake()
     {
@@ -49,11 +45,12 @@ public class EnemyMover : MonoBehaviour
         target = GameObject.FindWithTag("MainCamera");
         camera = target.GetComponent<Camera>();
 
-        enemyCollider = gameObject.GetComponent<Collider2D>();
-
-        numColliders = 16;
-        collisionResults = new Collider2D[numColliders];
-        contactFilter = new ContactFilter2D().NoFilter();
+        playerScore = PlayerPrefs.GetInt("PlayerScore");
+        if (playerScore > 100000)
+        {
+            moveSpeed = moveSpeed * 2f;
+            turnSpeed = turnSpeed * 2f;
+        }
     }
 
     // Update is called once per frame
@@ -141,7 +138,7 @@ public class EnemyMover : MonoBehaviour
                 targetVectorARGround = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
 
                 // This makes the enemy tank "look" at the player in regard to the x, z axis
-                float turnAngle = 10;
+                float turnAngle = 15;
                 float stopAngle = 1;
                 if (Vector3.Angle(transform.forward, targetVectorARGround - transform.position) > turnAngle)
                 {
@@ -160,9 +157,6 @@ public class EnemyMover : MonoBehaviour
                 }
                 else if (Vector3.Distance(targetVectorARGround, transform.position) > 0.5f && (Physics.Raycast(transform.position, Vector3.down, 0.1f)))
                 {
-                    // NEED TO ADD IN DETECTION FOR WHEN THE ENEMY SPAWNS SLIGHTLY INSIDE PLANE
-                    // Can't just look up, because it hits itself
-                    // Need to check what it is hitting slightly both up and down and confirm that it is an AR plane, not itself
                     transform.position += transform.forward * moveSpeed * Time.deltaTime;
                 }
 
@@ -190,35 +184,28 @@ public class EnemyMover : MonoBehaviour
             enemyAlert += "ENEMY IN RANGE";
         }
 
+        print(enemyPos.ToString());
+
         if (!easilyViewable)
         {
             if (enemyPos.z < 0)
             {
                 enemyAlert += "\n\nENEMY TO REAR";
             }
-            else if (enemyPos.x > 0)
+            else if (enemyPos.x > 0.5f)
             {
                 enemyAlert += "\n\nENEMY TO RIGHT";
             }
-            else if (enemyPos.x < 0)
+            else if (enemyPos.x < -0.5f)
             {
                 enemyAlert += "\n\nENEMY TO LEFT";
+            }
+            else if (enemyPos.y < 0)
+            {
+                enemyAlert += "\n\nENEMY BELOW";
             }
         }
 
         AlertLog.write(enemyAlert);
-
-
-
-        //// This tells us if the two objects are facing one another
-        //Vector3 dirFromAtoB = (target.transform.position - transform.position).normalized;
-        //float dotProd = Vector3.Dot(dirFromAtoB, transform.forward);
-
-        //if(dotProd > 0.95 && !shotFired){
-        //    shotFired = true;
-        //    Debug.Log("looking at");
-        //    // ObjA is looking mostly towards ObjB
-        //    //Shoot();
-        //}
     }
 }

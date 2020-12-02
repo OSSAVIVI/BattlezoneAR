@@ -17,7 +17,7 @@ public class ARShoot : MonoBehaviour
     private void Start()
     {
         isShooting = false;
-        shootRate = 1f;
+        shootRate = 1.5f;
         nextShoot = -1f;
         shootForce = 150f;
     }
