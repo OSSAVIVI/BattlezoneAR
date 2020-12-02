@@ -1,34 +1,85 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class MissileMover : MonoBehaviour
 {
     public GameObject target;
-    bool stopRotation = false;
+    bool randomTurns;
+    bool directTarget;
+    bool stopRotation;
 
     private Camera camera;
+
+    public float moveSpeed;
+    public float turnRangeMin;
+    public float turnRangeMax;
+    public float turnIntervalMin;
+    public float turnIntervalMax;
+    private float nextTurnTime;
 
     void Start()
     {
         target = GameObject.Find("Target");
         camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        
+        transform.LookAt(target.transform);
+        randomTurns = true;
+        directTarget = false;
+        stopRotation = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+
+        if (Vector3.Distance(transform.position, target.transform.position) < 2.5f)
+        {
+            randomTurns = false;
+            directTarget = true;
+        }
+
         if (Vector3.Distance(transform.position, target.transform.position) < 0.2f)
         {
+            directTarget = false;
             stopRotation = true;
         }
 
         if (!stopRotation)
         {
-            transform.LookAt(target.transform);
+            if (directTarget)
+            {
+                transform.LookAt(target.transform);
+            }
+
+            if (randomTurns)
+            {
+                
+                if(Vector3.Distance(transform.position, target.transform.position) > 8f)
+                {
+                    transform.LookAt(target.transform);
+                } else if (Time.time > nextTurnTime)
+                {
+                    // Get next turn time
+                    System.Random randomSeed = new System.Random();
+                    double timeRange = (double)turnIntervalMax - (double)(turnIntervalMin);
+                    double sampleTime = randomSeed.NextDouble();
+                    double scaledTime = (sampleTime * timeRange) + (turnIntervalMin);
+                    float randomTime = (float)scaledTime;
+                    nextTurnTime = Time.time + randomTime;
+
+                    // Turn random direction
+                    double turnRange = (double)turnRangeMax - (double)(turnRangeMin);
+                    double sampleTurn = randomSeed.NextDouble();
+                    double scaledTurn = (sampleTurn * turnRange) + (turnRangeMin);
+                    float turnDegree = (float)scaledTurn;
+                    transform.LookAt(target.transform);
+                    transform.Rotate(0.0f, turnDegree, 0.0f);
+                }
+            }
         }
 
-        transform.position += transform.forward * 1.75f * Time.deltaTime;
+        transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
         string enemyAlert = "";
 

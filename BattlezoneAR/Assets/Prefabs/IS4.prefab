@@ -247,7 +247,6 @@ GameObject:
   - component: {fileID: 25400324941180484}
   - component: {fileID: 5051574848418617213}
   - component: {fileID: 1264346824293381517}
-  - component: {fileID: 953126563414031140}
   - component: {fileID: 8969516972284831841}
   - component: {fileID: 8227893970216132682}
   m_Layer: 0
@@ -296,8 +295,22 @@ MonoBehaviour:
   projectile:
   - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
-  turnSpeed: 0.25
-  moveSpeed: 0.1
+  turnSpeed: 30
+  moveSpeed: 0.15
+  contactFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
 --- !u!65 &1264346824293381517
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -311,24 +324,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3, y: 2.3243115, z: 5}
   m_Center: {x: 0, y: 1.1621557, z: 0}
---- !u!114 &953126563414031140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 797680132196939006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e310086ede385854cb438e88721684a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  projectile:
-  - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
-  arPlaneManager: {fileID: 0}
-  turnSpeed: 0
-  moveSpeed: 0
 --- !u!114 &8969516972284831841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,7 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootRateMin: 3
-  shootRateMax: 5
+  shootRateMax: 4
   shootForce: 500
   projectile:
   - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}
