@@ -219,6 +219,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  moveSpeed: 1.8
+  turnRangeMin: -25
+  turnRangeMax: 25
+  turnIntervalMin: 1
+  turnIntervalMax: 2
 --- !u!65 &1658637726
 BoxCollider:
   m_ObjectHideFlags: 0

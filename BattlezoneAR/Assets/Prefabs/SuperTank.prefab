@@ -132,7 +132,7 @@ MonoBehaviour:
   projectile:
   - {fileID: 6244674530424216243, guid: c79fa74c849224876bd6f70d8c7e5c5d, type: 3}
   arPlaneManager: {fileID: 0}
-  turnSpeed: 30
+  turnSpeed: 35
   moveSpeed: 0.2
   contactFilter:
     useTriggers: 0
@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc87dcbdd5a42cd930cf57fe9d9612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootRateMin: 2
-  shootRateMax: 5
+  shootRateMin: 2.5
+  shootRateMax: 3
   shootForce: 500
   projectile:
   - {fileID: 6244674530424216243, guid: 5bf5040b3dcf7450189e0f08277edb8b, type: 3}

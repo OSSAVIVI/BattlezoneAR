@@ -84,7 +84,7 @@ public class EnemyMover : MonoBehaviour
         // There is a plane above the enemy
         if (allSkyHits.Count() > 0 && transform.position.y < highestARPlanePos.y)
         {
-            if ((highestARPlanePos.y - transform.position.y) > .1 || facingClimbHeight == true)
+            if ((highestARPlanePos.y - transform.position.y) > .3 || facingClimbHeight == true)
             {
 
                 float angle = 1;
