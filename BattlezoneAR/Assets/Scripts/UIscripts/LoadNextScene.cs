@@ -19,6 +19,10 @@ public class LoadNextScene : MonoBehaviour
 
     public void LoadNext()
     {
+        if (PlayerPrefs.GetInt("buttonLeft") == 0 && PlayerPrefs.GetInt("buttonRight") == 0)
+        {
+            PlayerPrefs.SetInt("buttonRight", 1); //by default, just choose right on first play
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
