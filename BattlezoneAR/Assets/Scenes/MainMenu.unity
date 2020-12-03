@@ -2231,7 +2231,7 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "*strategy*\n\n\u2022 use the alert system\n\u2022 keep shooting \u2014
-    don't give enemies a chance to attack\n\u2022 listen for enemies approaching
+    don't give enemies the chance to attack\n\u2022 listen for enemies approaching
     from all directions"
 --- !u!222 &1355410096
 CanvasRenderer:
@@ -2762,8 +2762,8 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "*instructions*\n\n\u2022 find an open & clear area to play\n\u2022 slowly
-    look around the area for enemy portals\n\u2022 keep an eye on your surroundings
-    and shoot enemies\n"
+    look around the area for enemy portals\n\u2022 keep an eye on your surroundings\n\u2022
+    shoot enemies\n"
 --- !u!222 &1522895782
 CanvasRenderer:
   m_ObjectHideFlags: 0
