@@ -176,34 +176,26 @@ public class SpawnOnPlane : MonoBehaviour
                     // May sometimes not be above actual plane
                     Vector3 min = arPlane.GetComponent<MeshFilter>().mesh.bounds.min;
                     Vector3 max = arPlane.GetComponent<MeshFilter>().mesh.bounds.max;
+                    double randXDouble = (randomSeed.NextDouble() * ((double)max.x - (double)min.x)) + (double)min.x;
+                    float randX = (float)randXDouble;
+                    double randZDouble = (randomSeed.NextDouble() * ((double)max.z - (double)min.z)) + (double)min.z;
+                    float randZ = (float)randZDouble;
 
-                    double rangeX = (double)max.x - (double)min.x;
-                    double sampleX = randomSeed.NextDouble();
-                    double scaledX = (sampleX * rangeX) + min.x;
-                    float randX = (float)scaledX;
-
-                    double rangeZ = (double)max.z - (double)min.z;
-                    double sampleZ = randomSeed.NextDouble();
-                    double scaledZ = (sampleZ * rangeZ) + min.z;
-                    float randZ = (float)scaledZ;
-
+                    // Store random AR spawn location 
                     spawnARPosition = new Vector3(arPlane.center.x + randX, arPlane.center.y + 0.05f, arPlane.center.z + randZ);
-                    target = GameObject.FindWithTag("MainCamera");
-                    targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
 
-                    // If the random point was not within the bounds, just put in the center of the plane
+                    // If the random point was not within the bounds, just place in center of the plane
                     if (!Physics.Raycast(spawnARPosition, Vector3.down, 0.1f))
                     {
                         spawnARPosition = new Vector3(arPlane.center.x, arPlane.center.y + 0.05f, arPlane.center.z);
-                        target = GameObject.FindWithTag("MainCamera");
-                        targetVectorGround = new Vector3(target.transform.position.x, arPlane.center.y + 0.05f, target.transform.position.z);
                     }
 
-                    // If below a different plane, lift tank up
+                    // If below a different plane, lift tank up to highest plane
                     Vector3 spawnSkyPosition = new Vector3(spawnARPosition.x, spawnARPosition.y + 100.0f, spawnARPosition.z);
                     RaycastHit[] allSkyHits = Physics.RaycastAll(spawnSkyPosition, Vector3.down);
                     Vector3 highestARPlanePos = new Vector3(spawnARPosition.x, -999.9f, spawnARPosition.z);
 
+                    // Find highest plane
                     foreach (var hit in allSkyHits)
                     {
                         if (hit.collider.name.Substring(0, 7) == "ARPlane" && highestARPlanePos.y < hit.point.y)
@@ -212,12 +204,17 @@ public class SpawnOnPlane : MonoBehaviour
                         }
                     }
 
+                    // Place a bit above highest plane if one is found
                     if (spawnARPosition.y < highestARPlanePos.y)
                     {
                         spawnARPosition.y = highestARPlanePos.y + 0.05f;
-                        //InGameLog.writeToLog("SPAWNED ABOVE");
                     }
 
+                    // Store player location information in reference to AR plane
+                    target = GameObject.FindWithTag("MainCamera");
+                    targetVectorGround = new Vector3(target.transform.position.x, spawnARPosition.y, target.transform.position.z);
+
+                    // Store spawn position
                     spawnPosition = spawnARPosition;
 
                 } // If non-AR plane spawn

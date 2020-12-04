@@ -150,6 +150,7 @@ public class EnemyMover : MonoBehaviour
                     turning = false;
                 }
 
+                // Either turn towards player or move towards player
                 if (turning == true)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(targetVectorARGround - transform.position);
